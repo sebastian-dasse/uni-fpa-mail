@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FPA Mailer SD
+Bundle-Name: Main
 Bundle-SymbolicName: de.bht.fpa.mail.s791537.main; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: de.bht.fpa.mail.s791537.main.Activator
