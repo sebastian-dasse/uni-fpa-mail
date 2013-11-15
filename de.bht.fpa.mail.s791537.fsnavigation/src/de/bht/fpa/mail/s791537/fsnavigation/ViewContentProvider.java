@@ -16,15 +16,10 @@ public class ViewContentProvider implements ITreeContentProvider {
    */
   @Override
   public Object[] getChildren(Object parentElement) {
-    if (!hasChildren(parentElement)) {
+    if (!(parentElement instanceof AbstractTreeFile) || !hasChildren(parentElement)) {
       return new Object[0];
     }
-    // TODO instanceof
     return ((AbstractTreeFile) parentElement).getChildren();
-
-    // TODO FRAGE: ?-Operator nicht ok? (von Checkstyle moniert):
-    // return hasChildren(parentElement) ? ((AbstractTreeFile)
-    // parentElement).getChildren() : new Object[0];
   }
 
   /**
@@ -44,10 +39,6 @@ public class ViewContentProvider implements ITreeContentProvider {
       return false;
     }
     return ((AbstractTreeFile) element).hasChildren();
-
-    // TODO FRAGE: ?-Operator nicht ok? (von Checkstyle moniert):
-    // return element instanceof AbstractTreeFile ? ((AbstractTreeFile)
-    // element).hasChildren() : false;
   }
 
   // ==========================================================================

@@ -28,10 +28,6 @@ public class TreeDirectory extends AbstractTreeFile {
       } else {
         children.add(new TreeFile(f.getPath()));
       }
-
-      // TODO FRAGE: ?-Operator nicht ok? (von Checkstyle moniert):
-      // children.add(f.isDirectory() ? new TreeDirectory(f.getPath()) : new
-      // TreeFile(f.getPath()));
     }
     return children.toArray();
   }
