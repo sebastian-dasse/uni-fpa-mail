@@ -5,6 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import de.bht.fpa.mail.s791537.file.TreeDirectory;
+
 public class NavigationView extends ViewPart {
   public static final String ID = "de.bht.fpa.s791537.fsnavigation.NavigationView";
   private TreeViewer viewer;

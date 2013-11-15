@@ -1,8 +1,9 @@
-package de.bht.fpa.mail.s791537.fsnavigation;
+package de.bht.fpa.mail.s791537.file;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+
 
 /**
  * This class represents a directory in a file tree.

@@ -1,4 +1,5 @@
-package de.bht.fpa.mail.s791537.fsnavigation;
+package de.bht.fpa.mail.s791537.file;
+
 
 /**
  * This class represents a file in a file tree.

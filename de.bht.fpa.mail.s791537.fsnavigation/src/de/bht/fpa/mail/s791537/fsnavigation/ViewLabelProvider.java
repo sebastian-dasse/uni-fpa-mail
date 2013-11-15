@@ -3,6 +3,9 @@ package de.bht.fpa.mail.s791537.fsnavigation;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import de.bht.fpa.mail.s791537.file.AbstractTreeFile;
+import de.bht.fpa.mail.s791537.file.TreeDirectory;
+
 public class ViewLabelProvider extends LabelProvider {
   public static final Image FOLDER_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/folder-26.png").createImage();
