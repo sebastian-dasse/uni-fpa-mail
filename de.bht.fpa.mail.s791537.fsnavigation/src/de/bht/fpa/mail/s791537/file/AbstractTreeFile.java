@@ -26,9 +26,12 @@ public abstract class AbstractTreeFile {
     return new Object[0];
   }
 
-  @Override
-  public String toString() {
+  public String getName() {
     return file.getName();
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[file=\"" + file.toString() + "\"]";
+  }
 }

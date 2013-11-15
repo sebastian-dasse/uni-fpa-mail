@@ -14,7 +14,10 @@ public class ViewLabelProvider extends LabelProvider {
 
   @Override
   public String getText(Object element) {
-    return super.getText(element);
+    if (!(element instanceof AbstractTreeFile)) {
+      return super.getText(element);
+    }
+    return super.getText(((AbstractTreeFile) element).getName());
   }
 
   @Override
