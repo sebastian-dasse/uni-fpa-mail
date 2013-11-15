@@ -1,6 +1,6 @@
 package de.bht.fpa.mail.s791537.fsnavigation;
 
-// TODO: git push funktioniert nicht aus eclipse heraus
+// TODO git push funktioniert nicht aus eclipse heraus
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
