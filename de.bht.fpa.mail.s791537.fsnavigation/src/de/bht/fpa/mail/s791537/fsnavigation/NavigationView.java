@@ -1,5 +1,8 @@
 package de.bht.fpa.mail.s791537.fsnavigation;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -7,7 +10,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s791537.file.TreeDirectory;
 
-public class NavigationView extends ViewPart {
+public class NavigationView extends ViewPart implements Observer {
   public static final String ID = "de.bht.fpa.s791537.fsnavigation.NavigationView";
   private TreeViewer viewer;
 
@@ -31,6 +34,11 @@ public class NavigationView extends ViewPart {
     // Here we set the root of the tree. The framework will ask for more data
     // when the user expands tree items.
     viewer.setInput(createModel());
+
+    // TODO DOK IT!
+    // alternativ: mit Instanzvariable Scout scout und einem Konstruktor
+    // NavView(), wo dem Scout this als Observer hinzugefügt wird
+    Scout.getInstance().addObserver(this);
   }
 
   /**
@@ -46,5 +54,12 @@ public class NavigationView extends ViewPart {
   @Override
   public void setFocus() {
     viewer.getControl().setFocus();
+  }
+
+  // TODO DOK IT!
+  @Override
+  public void update(Observable o, Object arg) {
+    viewer.setInput(new TreeDirectory(arg.toString()));
+    // viewer.setInput(new TreeDirectory(Scout.getInstance().getMessage()));
   }
 }

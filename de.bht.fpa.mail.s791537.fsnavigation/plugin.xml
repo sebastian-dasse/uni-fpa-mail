@@ -31,7 +31,7 @@
       <command
             categoryId="de.bht.fpa.mail.s791537.fsnavigation.commands.category"
             id="de.bht.fpa.mail.s791537.fsnavigation.commands.sampleCommand"
-            name="Sample Command">
+            name="Set Base Directory">
       </command>
    </extension>
    <extension
@@ -56,7 +56,7 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="de.bht.fpa.mail.s791537.fsnavigation.menus.sampleMenu"
-               label="Sample Menu"
+               label="FS Navigation"
                mnemonic="M">
             <command
                   commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.sampleCommand"
