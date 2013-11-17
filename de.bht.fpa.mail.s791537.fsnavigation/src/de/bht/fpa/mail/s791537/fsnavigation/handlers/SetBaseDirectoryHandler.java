@@ -31,8 +31,10 @@ public class SetBaseDirectoryHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
-    String path = new DirectoryDialog(window.getShell()).open();
-    Scout.getInstance().sendMessage(path);
+    DirectoryDialog dialog = new DirectoryDialog(window.getShell());
+    dialog.setText("Set Base Directory");
+    dialog.setMessage("Select a base directory for the navigation tree, please.");
+    Scout.getInstance().sendMessage(dialog.open());
 
     // alternativ: Instanzvariable Scout scout im Konstruktor initialisieren,
     // dann:
