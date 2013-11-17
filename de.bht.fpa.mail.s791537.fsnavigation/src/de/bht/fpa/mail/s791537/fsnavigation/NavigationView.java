@@ -8,8 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.bht.fpa.mail.s791537.file.TreeDirectory;
-
 public class NavigationView extends ViewPart implements Observer {
   public static final String ID = "de.bht.fpa.s791537.fsnavigation.NavigationView";
   private TreeViewer viewer;
@@ -36,16 +34,15 @@ public class NavigationView extends ViewPart implements Observer {
     viewer.setInput(createModel());
 
     // TODO DOK IT!
-    // alternativ: mit Instanzvariable Scout scout und einem Konstruktor
-    // NavView(), wo dem Scout this als Observer hinzugefügt wird
-    Scout.getInstance().addObserver(this);
+    RootModel.getInstance().addObserver(this);
   }
 
   /**
    * We will set up a model to initialize tree hierarchy.
    */
   private Object createModel() {
-    return new TreeDirectory(System.getProperty("user.home"));
+    // return new TreeDirectory(System.getProperty("user.home"));
+    return RootModel.getInstance().getRoot();
   }
 
   /**
@@ -59,7 +56,6 @@ public class NavigationView extends ViewPart implements Observer {
   // TODO DOK IT!
   @Override
   public void update(Observable o, Object arg) {
-    viewer.setInput(new TreeDirectory(arg.toString()));
-    // viewer.setInput(new TreeDirectory(Scout.getInstance().getMessage()));
+    viewer.setInput(arg);
   }
 }

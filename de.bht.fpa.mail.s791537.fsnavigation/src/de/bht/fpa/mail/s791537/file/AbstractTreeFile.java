@@ -15,6 +15,10 @@ public abstract class AbstractTreeFile {
   protected final File file;
 
   public AbstractTreeFile(String path) {
+    File newFile = new File(path);
+    if (!newFile.exists()) {
+      throw new IllegalArgumentException("The specified path is not valid.");
+    }
     file = new File(path);
   }
 

@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import de.bht.fpa.mail.s791537.fsnavigation.Scout;
+import de.bht.fpa.mail.s791537.fsnavigation.RootModel;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -34,11 +34,7 @@ public class SetBaseDirectoryHandler extends AbstractHandler {
     DirectoryDialog dialog = new DirectoryDialog(window.getShell());
     dialog.setText("Set Base Directory");
     dialog.setMessage("Select a base directory for the navigation tree, please.");
-    Scout.getInstance().sendMessage(dialog.open());
-
-    // alternativ: Instanzvariable Scout scout im Konstruktor initialisieren,
-    // dann:
-    // scout.sendMessage(path);
+    RootModel.getInstance().setRoot(dialog.open());
     return null;
   }
 }
