@@ -34,6 +34,10 @@ public abstract class AbstractTreeFile {
     return file.getName();
   }
 
+  public String getPath() {
+    return file.getPath();
+  }
+
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[file=\"" + file.toString() + "\"]";

@@ -1,9 +1,17 @@
 package de.bht.fpa.mail.s791537.fsnavigation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.LinkedList;
+import java.util.Scanner;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import de.bht.fpa.mail.s791537.file.AbstractTreeFile;
+import de.bht.fpa.mail.s791537.file.TreeDirectory;
+import de.bht.fpa.mail.s791537.file.TreeFile;
 
 public class ViewContentProvider implements ITreeContentProvider {
 
@@ -21,7 +29,43 @@ public class ViewContentProvider implements ITreeContentProvider {
     if (!(parentElement instanceof AbstractTreeFile) || !hasChildren(parentElement)) {
       return new Object[0];
     }
-    return ((AbstractTreeFile) parentElement).getChildren();
+
+    // ---- neu --
+    // TODO das meiste davon sollte von der NavView aus aufgerufen werden
+    // TODO Ordner ohne Unterordner sollten keine Aufklapp-Dreiecke mehr haben
+    AbstractTreeFile parent = (AbstractTreeFile) parentElement;
+    System.out.println("Selected directory: " + parent.getPath());
+    Object[] children = parent.getChildren();
+    LinkedList<AbstractTreeFile> dirList = new LinkedList<AbstractTreeFile>();
+    LinkedList<AbstractTreeFile> fileList = new LinkedList<AbstractTreeFile>();
+    int numOfMsgs = 0;
+    for (Object child : children) {
+      if (child instanceof TreeDirectory) {
+        dirList.add((TreeDirectory) child);
+      } else { // child instanceof TreeFile
+        TreeFile file = (TreeFile) child;
+        if (file.getName().endsWith(".xml")) {
+          fileList.add(file);
+          numOfMsgs++;
+        }
+      }
+    }
+    System.out.println("Number of messages: " + numOfMsgs);
+    for (AbstractTreeFile file : fileList) {
+      System.out.print(": ");
+      try {
+        Scanner in = new Scanner(new FileReader(new File(file.getPath())));
+        while (in.hasNext()) {
+          System.out.println(in.nextLine());
+        }
+      } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return dirList.toArray();
+    // ----
+    // return ((AbstractTreeFile) parentElement).getChildren();
   }
 
   /**

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 
-
 /**
  * This class represents a directory in a file tree.
  */
@@ -22,8 +21,12 @@ public class TreeDirectory extends AbstractTreeFile {
 
   @Override
   public Object[] getChildren() {
+    File[] files = file.listFiles();
+    if (files == null) {
+      return new Object[0];
+    }
     Collection<AbstractTreeFile> children = new LinkedList<AbstractTreeFile>();
-    for (File f : file.listFiles()) {
+    for (File f : files) {
       if (f.isDirectory()) {
         children.add(new TreeDirectory(f.getPath()));
       } else {
