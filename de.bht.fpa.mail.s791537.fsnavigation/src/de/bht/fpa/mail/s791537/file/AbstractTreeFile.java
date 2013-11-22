@@ -19,7 +19,7 @@ public abstract class AbstractTreeFile {
     if (!newFile.exists()) {
       throw new IllegalArgumentException("The specified path is not valid.");
     }
-    file = new File(path);
+    file = newFile;
   }
 
   public boolean hasChildren() {

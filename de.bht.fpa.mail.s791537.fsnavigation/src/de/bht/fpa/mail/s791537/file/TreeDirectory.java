@@ -1,8 +1,14 @@
 package de.bht.fpa.mail.s791537.file;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+
+import javax.xml.bind.JAXB;
+
+import de.bht.fpa.mail.s000000.common.mail.model.Message;
 
 /**
  * This class represents a directory in a file tree.
@@ -29,11 +35,41 @@ public class TreeDirectory extends AbstractTreeFile {
     for (File f : files) {
       if (f.isDirectory()) {
         children.add(new TreeDirectory(f.getPath()));
-      } else {
-        children.add(new TreeFile(f.getPath()));
       }
+      // else {
+      // children.add(new TreeFile(f.getPath()));
+      // }
     }
     return children.toArray();
   }
 
+  public List<Message> getMessages() {
+    File[] xmlFiles = file.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".xml");
+      }
+    });
+    List<Message> messages = new LinkedList<Message>();
+    if (xmlFiles == null) {
+      return messages;
+    }
+    for (File xmlFile : xmlFiles) {
+      try {
+        Message message = JAXB.unmarshal(xmlFile, Message.class);
+        if (message == null) {
+          continue;
+        }
+        if (message.getId() == null || message.getId() < 0) {
+          continue;
+        }
+        messages.add(message);
+      } catch (Exception e) {
+        // Die Anwendung soll XML-Dateien, die unserem Format nicht entsprechen,
+        // ignorieren.
+        continue;
+      }
+    }
+    return messages;
+  }
 }
