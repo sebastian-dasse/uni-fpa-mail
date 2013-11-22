@@ -13,7 +13,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
-import de.bht.fpa.mail.s791537.file.TreeDirectory;
+import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
 
 public class NavigationView extends ViewPart implements Observer {
   public static final String ID = "de.bht.fpa.s791537.fsnavigation.NavigationView";

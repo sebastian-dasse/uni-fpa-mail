@@ -2,7 +2,7 @@ package de.bht.fpa.mail.s791537.fsnavigation;
 
 import java.util.Observable;
 
-import de.bht.fpa.mail.s791537.file.TreeDirectory;
+import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
 
 /**
  * TODO DOK IT ALL!

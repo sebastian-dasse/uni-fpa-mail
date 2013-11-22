@@ -3,7 +3,7 @@ package de.bht.fpa.mail.s791537.fsnavigation;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import de.bht.fpa.mail.s791537.file.AbstractTreeFile;
+import de.bht.fpa.mail.s791537.fsnavigation.file.AbstractTreeFile;
 
 public class ViewContentProvider implements ITreeContentProvider {
 

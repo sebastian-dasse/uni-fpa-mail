@@ -1,4 +1,4 @@
-package de.bht.fpa.mail.s791537.file;
+package de.bht.fpa.mail.s791537.fsnavigation.file;
 
 import java.io.File;
 import java.io.FilenameFilter;
