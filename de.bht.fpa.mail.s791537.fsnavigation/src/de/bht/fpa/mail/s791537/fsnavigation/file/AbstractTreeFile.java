@@ -12,8 +12,17 @@ import java.io.File;
  * must be overwritten if any other behaviour is desired.
  */
 public abstract class AbstractTreeFile {
+  /**
+   * The path of this <code>AbstractTreeFile</code>.
+   */
   protected final File file;
 
+  /**
+   * Constructs a new <code>AbstractTreeFile</code> with the specified path.
+   * 
+   * @param path
+   *          The path of the <code>AbstractTreeFile</code>.
+   */
   public AbstractTreeFile(String path) {
     File newFile = new File(path);
     if (!newFile.exists()) {
@@ -22,18 +31,32 @@ public abstract class AbstractTreeFile {
     file = newFile;
   }
 
+  /**
+   * @return <code>true</code> if this <code>AbstractTreeFile</code> has
+   *         children, otherwise <code>false</code>.
+   */
   public boolean hasChildren() {
     return false;
   }
 
+  /**
+   * @return An Object array containing the children of this
+   *         <code>AbstractTreeFile</code>, or an empty array for no children.
+   */
   public Object[] getChildren() {
     return new Object[0];
   }
 
+  /**
+   * @return The name of this <code>AbstractTreeFile</code>.
+   */
   public String getName() {
     return file.getName();
   }
 
+  /**
+   * @return The path of this <code>AbstractTreeFile</code>.
+   */
   public String getPath() {
     return file.getPath();
   }

@@ -40,26 +40,22 @@ public class NavigationView extends ViewPart implements Observer {
     // when the user expands tree items.
     viewer.setInput(createModel());
 
-    // TODO DOK IT!
     viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
       @Override
       public void selectionChanged(SelectionChangedEvent event) {
         TreeDirectory dir = SelectionHelper.handleStructuredSelectionEvent(event, TreeDirectory.class);
         if (dir == null) {
           return;
         }
-        String path = dir.getPath();
         List<Message> messages = dir.getMessages();
-        System.out.println("Selected directory:" + path);
-        System.out.println("Number of messages:" + messages.size());
+        System.out.println("Selected directory: " + dir.getPath());
+        System.out.println("Number of messages: " + messages.size());
         for (Message message : messages) {
           System.out.println(message.toShortString());
         }
       }
     });
-
-    // TODO DOK IT!
+    
     RootModel.getInstance().addObserver(this);
   }
 
@@ -67,7 +63,6 @@ public class NavigationView extends ViewPart implements Observer {
    * We will set up a model to initialize tree hierarchy.
    */
   private Object createModel() {
-    // return new TreeDirectory(System.getProperty("user.home"));
     return RootModel.getInstance().getRoot();
   }
 
@@ -79,7 +74,6 @@ public class NavigationView extends ViewPart implements Observer {
     viewer.getControl().setFocus();
   }
 
-  // TODO DOK IT!
   @Override
   public void update(Observable o, Object arg) {
     viewer.setInput(arg);

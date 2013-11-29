@@ -36,6 +36,8 @@ public class TreeDirectory extends AbstractTreeFile {
       if (f.isDirectory()) {
         children.add(new TreeDirectory(f.getPath()));
       }
+      // The navigation tree shall not view files anymore, therefore commented
+      // out the following:
       // else {
       // children.add(new TreeFile(f.getPath()));
       // }
@@ -43,6 +45,11 @@ public class TreeDirectory extends AbstractTreeFile {
     return children.toArray();
   }
 
+  /**
+   * @return A <code>List</code> containing all messages in this
+   *         <code>TreeDirectory</code> that match our format, or
+   *         <code>null</code> for no matching messages.
+   */
   public List<Message> getMessages() {
     File[] xmlFiles = file.listFiles(new FilenameFilter() {
       @Override
@@ -65,8 +72,7 @@ public class TreeDirectory extends AbstractTreeFile {
         }
         messages.add(message);
       } catch (Exception e) {
-        // Die Anwendung soll XML-Dateien, die unserem Format nicht entsprechen,
-        // ignorieren.
+        // Our application shall ignore XML files which do not match our format.
         continue;
       }
     }

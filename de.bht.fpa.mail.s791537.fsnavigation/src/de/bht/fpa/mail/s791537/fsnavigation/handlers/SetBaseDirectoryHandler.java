@@ -30,7 +30,6 @@ public class SetBaseDirectoryHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-
     DirectoryDialog dialog = new DirectoryDialog(window.getShell());
     dialog.setText("Set Base Directory");
     dialog.setMessage("Select a base directory for the navigation tree, please.");
