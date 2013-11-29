@@ -33,12 +33,21 @@
             id="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory"
             name="Set Base Directory">
       </command>
+      <command
+            categoryId="de.bht.fpa.mail.s791537.fsnavigation.commands.category"
+            id="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory"
+            name="Set Base Directory In History">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="de.bht.fpa.mail.s791537.fsnavigation.handlers.SetBaseDirectoryHandler"
             commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory">
+      </handler>
+      <handler
+            class="de.bht.fpa.mail.s791537.fsnavigation.handlers.SetBaseDirectoryInHistoryHandler"
+            commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory">
       </handler>
    </extension>
    <extension
@@ -47,7 +56,13 @@
             commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+6">
+            sequence="M1+B">
+      </key>
+      <key
+            commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+H">
       </key>
    </extension>
    <extension
@@ -60,8 +75,13 @@
                mnemonic="M">
             <command
                   commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory"
-                  id="de.bht.fpa.mail.s791537.fsnavigation.menus.sampleCommand"
-                  mnemonic="S">
+                  id="de.bht.fpa.mail.s791537.fsnavigation.menus.setBaseDirectory"
+                  mnemonic="B">
+            </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory"
+                  id="de.bht.fpa.mail.s791537.fsnavigation.menus.setBaseDirectoryInHistory"
+                  mnemonic="H">
             </command>
          </menu>
       </menuContribution>
@@ -72,7 +92,13 @@
             <command
                   commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory"
                   icon="icons/sample.gif"
-                  id="de.bht.fpa.mail.s791537.fsnavigation.toolbars.sampleCommand"
+                  id="de.bht.fpa.mail.s791537.fsnavigation.toolbars.setBaseDirectory"
+                  tooltip="Say hello world">
+            </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory"
+                  icon="icons/sample.gif"
+                  id="de.bht.fpa.mail.s791537.fsnavigation.toolbars.setBaseDirectoryInHistory"
                   tooltip="Say hello world">
             </command>
          </toolbar>
