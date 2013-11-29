@@ -16,7 +16,6 @@ import de.bht.fpa.mail.s791537.fsnavigation.RootModel;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class SetBaseDirectoryHandler extends AbstractHandler {
-
   /**
    * The constructor.
    */

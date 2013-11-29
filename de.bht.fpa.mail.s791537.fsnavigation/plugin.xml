@@ -36,7 +36,7 @@
       <command
             categoryId="de.bht.fpa.mail.s791537.fsnavigation.commands.category"
             id="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectoryInHistory"
-            name="Set Base Directory In History">
+            name="History">
       </command>
    </extension>
    <extension
