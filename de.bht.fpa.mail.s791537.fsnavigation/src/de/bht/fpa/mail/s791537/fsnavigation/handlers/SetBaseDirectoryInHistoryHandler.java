@@ -61,13 +61,16 @@ public class SetBaseDirectoryInHistoryHandler extends AbstractHandler {
  */
 class SetBaseDirectoryInHistoryDialog extends SelectionDialog {
   private ListViewer viewer;
-  private final Object[] history;
+  private Object[] history;
 
   protected SetBaseDirectoryInHistoryDialog(Shell parentShell, Object[] history) {
     super(parentShell);
-    // this.history = history; // TODO a reasonable decision?
-    // do not show the current selection in history
-    this.history = Arrays.copyOfRange(history, 1, history.length);
+    if (history.length == 0) {
+      this.history = history;
+    } else {
+      // do not show the current selection in history
+      this.history = Arrays.copyOfRange(history, 1, history.length);
+    }
     setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
   }
 
