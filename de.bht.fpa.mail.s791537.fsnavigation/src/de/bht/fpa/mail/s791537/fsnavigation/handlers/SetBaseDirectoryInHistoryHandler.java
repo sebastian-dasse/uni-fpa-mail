@@ -1,5 +1,7 @@
 package de.bht.fpa.mail.s791537.fsnavigation.handlers;
 
+import java.util.Arrays;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -40,8 +42,7 @@ public class SetBaseDirectoryInHistoryHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
     RootModel model = RootModel.getInstance();
-    Object[] history = model.getHistory();
-    SelectionDialog dialog = new SetBaseDirectoryInHistoryDialog(window.getShell(), history);
+    SelectionDialog dialog = new SetBaseDirectoryInHistoryDialog(window.getShell(), model.getHistory());
     dialog.setTitle("Set Base Directory in History");
     dialog.open();
     Object[] result = dialog.getResult();
@@ -64,7 +65,9 @@ class SetBaseDirectoryInHistoryDialog extends SelectionDialog {
 
   protected SetBaseDirectoryInHistoryDialog(Shell parentShell, Object[] history) {
     super(parentShell);
-    this.history = history;
+    // this.history = history; // TODO a reasonable decision?
+    // do not show the current selection in history
+    this.history = Arrays.copyOfRange(history, 1, history.length);
     setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
   }
 
