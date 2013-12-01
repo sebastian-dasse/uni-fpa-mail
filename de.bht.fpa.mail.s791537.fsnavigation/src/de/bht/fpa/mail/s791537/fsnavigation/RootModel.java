@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -12,65 +14,95 @@ import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
 
 /**
  * This class remembers the selected base directory for the navigation tree. It
- * is by default set to the user's home directory. It will automatically store
- * the last selection for the sessions to come.
+ * is by default set to the user's home directory. The last selection will be
+ * remembered automatically for the next start of the application. What's more,
+ * all past selections are stored in list for the sessions to come.
  */
 public final class RootModel extends Observable {
   private static final File HISTORY = new File(System.getProperty("user.home") + "\\fpa-mailer\\history");
   private static final RootModel INSTANCE = new RootModel();
   private TreeDirectory root;
+  // TODO this list could become rather long, maybe we should restrain it to a
+  // certain size
+  private final LinkedList<String> history;
 
   private RootModel() {
-    String rootpath = readRoot();
-    if (rootpath == null) {
+    history = readHistory();
+    if (history.isEmpty()) {
       root = new TreeDirectory(System.getProperty("user.home"));
     } else {
-      root = new TreeDirectory(rootpath);
+      root = new TreeDirectory(history.peekFirst());
     }
   }
 
+  /**
+   * @return The sole instance of this class.
+   */
   public static RootModel getInstance() {
     return INSTANCE;
   }
 
-  public void setRoot(Object arg) {
-    if (arg != null) {
-      root = new TreeDirectory(arg.toString());
-      writeRoot();
+  /**
+   * @return The <code>TreeDirectory</code> that is currently set as base
+   *         directory.
+   */
+  public TreeDirectory getRoot() {
+    return root;
+  }
+
+  /**
+   * Sets the base directory of the navigation tree to the specified path.
+   * Afterwards the path is added to the history, which is then written to the
+   * hard drive. Finally all registered observers are being notified.
+   * 
+   * @param path
+   *          The new path for the base directory.
+   */
+  public void setRoot(String path) {
+    if (path != null) {
+      root = new TreeDirectory(path);
+      history.push(path);
+      writeHistory();
       setChanged();
       notifyObservers(root);
     }
   }
 
-  public TreeDirectory getRoot() {
-    return root;
+  /**
+   * Returns an array representing the list of base directories that were
+   * selected in the past, or an empty array if no selections have been made so
+   * far.
+   * 
+   * @return An array containing all of the past selections.
+   */
+  public Object[] getHistory() {
+    return history.toArray();
   }
 
-  private void writeRoot() {
-    FileWriter out = null;
+  private void writeHistory() {
+    PrintWriter out = null;
     try {
       if (!HISTORY.exists()) {
         new File(HISTORY.getPath().substring(0, HISTORY.getPath().lastIndexOf('\\'))).mkdir();
         HISTORY.createNewFile();
       }
-      out = new FileWriter(HISTORY);
-      out.write(root.getPath());
+      out = new PrintWriter(new FileWriter(HISTORY));
+      for (String path : history) {
+        out.println(path);
+      }
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
       if (out != null) {
-        try {
-          out.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        out.close();
       }
     }
   }
 
-  private String readRoot() {
+  private LinkedList<String> readHistory() {
+    LinkedList<String> list = new LinkedList<String>();
     if (!HISTORY.exists()) {
-      return null;
+      return list;
     }
     Scanner in = null;
     try {
@@ -81,14 +113,10 @@ public final class RootModel extends Observable {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    String path = in.nextLine();
+    while (in.hasNextLine()) {
+      list.add(in.nextLine());
+    }
     in.close();
-    return path;
-
-    // -- falls es mehrere Zeilen zu lesen gibt:
-    // System.out.println("-----");
-    // while (in.hasNextLine()) {
-    // System.out.println(in.nextLine());
-    // }
+    return list;
   }
 }
