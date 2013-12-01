@@ -28,7 +28,7 @@ public final class RootModel extends Observable {
 
   private RootModel() {
     history = readHistory();
-    if (history.isEmpty()) {
+    if (history == null || history.isEmpty()) { // FIXME
       root = new TreeDirectory(System.getProperty("user.home"));
     } else {
       root = new TreeDirectory(history.peekFirst());
@@ -61,6 +61,7 @@ public final class RootModel extends Observable {
   public void setRoot(String path) {
     if (path != null) {
       root = new TreeDirectory(path);
+      history.remove(path); // avoid double entries
       history.push(path);
       writeHistory();
       setChanged();
@@ -107,9 +108,6 @@ public final class RootModel extends Observable {
     Scanner in = null;
     try {
       in = new Scanner(new FileReader(HISTORY));
-      if (!in.hasNextLine()) {
-        return null;
-      }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }

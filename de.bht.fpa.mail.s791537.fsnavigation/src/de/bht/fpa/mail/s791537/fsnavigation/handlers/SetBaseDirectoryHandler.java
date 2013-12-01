@@ -31,7 +31,6 @@ public class SetBaseDirectoryHandler extends AbstractHandler {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
     DirectoryDialog dialog = new DirectoryDialog(window.getShell());
     dialog.setText("Set Base Directory");
-    // dialog.setMessage("Select a base directory for the navigation tree, please.");
     RootModel.getInstance().setRoot(dialog.open());
     return null;
   }

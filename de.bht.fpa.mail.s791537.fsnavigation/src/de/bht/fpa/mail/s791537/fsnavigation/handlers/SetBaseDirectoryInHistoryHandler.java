@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -36,65 +37,61 @@ public class SetBaseDirectoryInHistoryHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-    // MessageDialog.openInformation(window.getShell(), "Fsnavigation",
-
     RootModel model = RootModel.getInstance();
-    final Object[] list = model.getHistory();
-
-    SelectionDialog dialog = new SelectionDialog(window.getShell()) {
-      private ListViewer viewer;
-
-      {
-        setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-      }
-
-      @Override
-      protected Control createDialogArea(Composite parent) {
-        Composite composite = (Composite) super.createDialogArea(parent);
-        createMessageArea(composite);
-        viewer = new ListViewer(composite);
-        viewer.setContentProvider(ArrayContentProvider.getInstance());
-        viewer.setLabelProvider(new LabelProvider());
-        if (list.length == 0) {
-          viewer.getList().setEnabled(false);
-          viewer.setInput(new Object[] { "No base directories in history." });
-        } else {
-          viewer.setInput(list);
-        }
-        return composite;
-      }
-
-      @Override
-      protected void okPressed() {
-        // Build a list of selected children.
-        IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-        setResult(selection.toList());
-        super.okPressed();
-      }
-    };
-
+    Object[] history = model.getHistory();
+    SelectionDialog dialog = new SetBaseDirectoryInHistoryDialog(window.getShell(), history);
     dialog.setTitle("Set Base Directory in History");
-
-    int result = dialog.open();
-    Object[] res = dialog.getResult();
-    // if (result == Window.CANCEL) {
-    // if (res == null || res.length == 0) {
-    // if (result == Window.CANCEL || res.length == 0) {
-    if (res == null || res.length == 0) {
-      if (res == null) {
-        System.err.println("res == null -> result == Window.CANCEL");
-      } else if (res.length == 0) {
-        System.err.println("res.length == 0");
-      }
+    dialog.open();
+    Object[] result = dialog.getResult();
+    if (result == null || result.length == 0) {
       return null;
     }
-
-    // for (Object obj : dialog.getResult()) {
-    // System.out.println(obj);
-    // }
-    System.out.println(dialog.getResult()[0]);
     model.setRoot(dialog.getResult()[0].toString());
-    // RootModel.getInstance().setRoot(dialog.getResult()[0]);
     return null;
+  }
+}
+
+// =============================================================================
+/**
+ * A dialog which lets the user choose from a list of directories that have been
+ * selected in the past.
+ */
+class SetBaseDirectoryInHistoryDialog extends SelectionDialog {
+  private ListViewer viewer;
+  private final Object[] history;
+
+  protected SetBaseDirectoryInHistoryDialog(Shell parentShell, Object[] history) {
+    super(parentShell);
+    this.history = history;
+    setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+  }
+
+  @Override
+  protected Control createDialogArea(Composite parent) {
+    Composite composite = (Composite) super.createDialogArea(parent);
+    createMessageArea(composite);
+    viewer = new ListViewer(composite);
+    viewer.setContentProvider(ArrayContentProvider.getInstance());
+    viewer.setLabelProvider(new LabelProvider());
+    if (history.length == 0) {
+      viewer.getList().setEnabled(false);
+      viewer.setInput(new Object[] { "No base directories in history." });
+    } else {
+      viewer.setInput(history);
+    }
+    return composite;
+  }
+
+  /**
+   * Notifies that the ok button of this dialog has been pressed. Sets the
+   * result to the selection made by the user. Finally sets this dialog's return
+   * code to <code>Window.OK</code> and closes the dialog.
+   */
+  @Override
+  protected void okPressed() {
+    // Build a list of selected children.
+    IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+    setResult(selection.toList());
+    super.okPressed();
   }
 }
