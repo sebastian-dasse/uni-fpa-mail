@@ -14,34 +14,36 @@ import de.bht.fpa.mail.s000000.common.mail.model.Message;
  * This class represents a directory in a file tree.
  */
 public class TreeDirectory extends AbstractTreeFile {
+  /**
+   * A list of all children directories of this directory.
+   */
+  private final Collection<AbstractTreeFile> children;
 
   public TreeDirectory(String path) {
     super(path);
+    children = new LinkedList<AbstractTreeFile>();
+    File[] files = file.listFiles();
+    if (files != null) {
+      for (File f : files) {
+        if (f.isDirectory()) {
+          children.add(new TreeDirectory(f.getPath()));
+        }
+      }
+    }
   }
 
   @Override
   public boolean hasChildren() {
-    File[] files = file.listFiles();
-    return files != null && files.length > 0;
+    return children.size() > 0;
   }
 
+  /**
+   * Returns all children of this directory that are themselves directories.
+   * Note that contained files that are not directories are not considered as
+   * children.
+   */
   @Override
   public Object[] getChildren() {
-    File[] files = file.listFiles();
-    if (files == null) {
-      return new Object[0];
-    }
-    Collection<AbstractTreeFile> children = new LinkedList<AbstractTreeFile>();
-    for (File f : files) {
-      if (f.isDirectory()) {
-        children.add(new TreeDirectory(f.getPath()));
-      }
-      // The navigation tree shall not view files anymore, therefore commented
-      // out the following:
-      // else {
-      // children.add(new TreeFile(f.getPath()));
-      // }
-    }
     return children.toArray();
   }
 
