@@ -1,5 +1,7 @@
 package de.bht.fpa.mail.s791537.maillist;
 
+import java.text.SimpleDateFormat;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
@@ -7,6 +9,7 @@ import org.eclipse.ui.part.ViewPart;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.ralfebert.rcputils.tables.ColumnBuilder;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
+import de.ralfebert.rcputils.tables.format.Formatter;
 
 public class MaillistView extends ViewPart {
   private TableViewer viewer;
@@ -22,12 +25,15 @@ public class MaillistView extends ViewPart {
 
     ColumnBuilder received = t.createColumn("Received");
     received.bindToProperty("received");
+    // received.format(Formatter.forDate(SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)));
+    received.format(Formatter.forDate(SimpleDateFormat.getDateTimeInstance(2, 3)));
     received.useAsDefaultSortColumn();
     received.build();
 
     // TODO verursacht Fehler, vermutlich weil boolean
     // ColumnBuilder read = t.createColumn("Read");
     // read.bindToProperty("read");
+    // read.bindToValue("read");
     // read.build();
 
     ColumnBuilder sender = t.createColumn("Sender");
