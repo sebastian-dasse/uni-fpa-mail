@@ -9,7 +9,6 @@ import de.ralfebert.rcputils.tables.ColumnBuilder;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 
 public class MaillistView extends ViewPart {
-  public static final String ID = "de.bht.fpa.s791537.maillist.MaillistView";
   private TableViewer viewer;
 
   @Override
