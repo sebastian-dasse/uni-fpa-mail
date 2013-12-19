@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
+import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.ralfebert.rcputils.tables.ColumnBuilder;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
@@ -24,28 +25,37 @@ public class MaillistView extends ViewPart {
     importance.build();
 
     ColumnBuilder received = t.createColumn("Received");
-    received.bindToProperty("received");
-    // received.format(Formatter.forDate(SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT)));
-    received.format(Formatter.forDate(SimpleDateFormat.getDateTimeInstance(2, 3)));
+    // received.bindToProperty("received");
+    received.bindToValue(MessageValues.RECEIVED);
+    received.format(Formatter.forDate(SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)));
+    // alternativ: mit Uhrzeit
+    // received.format(Formatter.forDate(SimpleDateFormat.getDateTimeInstance(2,
+    // 3)));
     received.useAsDefaultSortColumn();
     received.build();
 
     // TODO verursacht Fehler, vermutlich weil boolean
-    // ColumnBuilder read = t.createColumn("Read");
+    ColumnBuilder read = t.createColumn("Read");
     // read.bindToProperty("read");
     // read.bindToValue("read");
-    // read.build();
+    read.bindToValue(MessageValues.READ);
+    read.build();
 
     ColumnBuilder sender = t.createColumn("Sender");
-    sender.bindToProperty("sender");
+    // sender.bindToProperty("sender");
+    // sender.bindToValue(MessageValues.SENDER);
+    sender.bindToValue(MyMessageValues.SENDER_EMAIL);
+    // sender.format(valueFormatter)
     sender.build();
 
     ColumnBuilder recipients = t.createColumn("Recipients");
-    recipients.bindToProperty("recipients");
+    // recipients.bindToProperty("recipients");
+    recipients.bindToValue(MyMessageValues.RECIPIENT_EMAIL);
     recipients.build();
 
     ColumnBuilder subject = t.createColumn("Subject");
-    subject.bindToProperty("subject");
+    // subject.bindToProperty("subject");
+    subject.bindToValue(MessageValues.SUBJECT);
     subject.build();
 
     t.setInput(new RandomTestDataProvider(50).getMessages());
