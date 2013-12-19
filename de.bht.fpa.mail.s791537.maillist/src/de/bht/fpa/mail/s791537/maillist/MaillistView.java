@@ -3,25 +3,29 @@ package de.bht.fpa.mail.s791537.maillist;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.bht.fpa.mail.s000000.common.mail.model.Importance;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.ralfebert.rcputils.properties.BaseValue;
 import de.ralfebert.rcputils.tables.ColumnBuilder;
-import de.ralfebert.rcputils.tables.ICellFormatter;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
 public class MaillistView extends ViewPart {
 
+  private static final int IMPORTANCE_PIXEL_WIDTH = 35;
+  private static final int RECEIVED_PIXEL_WIDTH = 85;
+  private static final int READ_PIXEL_WIDTH = 50;
+  private static final int SENDER_PERCENT_WIDTH = 25;
+  private static final int RECIPIENTS_PERCENT_WIDTH = 25;
+  private static final int SUBJECT_PERCENT_WIDTH = 50;
   private static final int NUMBER_OF_MESSAGES = 50;
   private static final Image LOW_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/low_importance-26.png").createImage();
@@ -29,7 +33,6 @@ public class MaillistView extends ViewPart {
       .createImage();
   private static final Image HIGH_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/high_importance-26.png").createImage();
-
   private TableViewer viewer;
 
   @Override
@@ -39,58 +42,87 @@ public class MaillistView extends ViewPart {
 
     ColumnBuilder importance = t.createColumn("Importance");
     importance.bindToProperty("importance");
-    importance.format(new ICellFormatter() {
-      @Override
-      public void formatCell(ViewerCell cell, Object value) {
-        // TODO Auto-generated method stub
+    // ---- 1. Variante
+    // importance.format(new ICellFormatter() {
+    // @Override
+    // public void formatCell(ViewerCell cell, Object value) {
+    // switch ((Importance) value) {
+    // case LOW:
+    // cell.setImage(LOW_ICON);
+    // break;
+    // case NORMAL:
+    // cell.setImage(NORMAL_ICON);
+    // break;
+    // case HIGH:
+    // cell.setImage(HIGH_ICON);
+    // break;
+    // default:
+    // // TODO sollte hier irgendetwas passieren?
+    // break;
+    // }
+    // cell.setText("");
+    // }
+    // });
+    importance.setPixelWidth(IMPORTANCE_PIXEL_WIDTH);
+    // importance.build();
 
-        switch ((Importance) value) {
+    // ---- 2. Variante
+    importance.build().setLabelProvider(new ColumnLabelProvider() {
+      @Override
+      public String getText(Object element) {
+        return null;
+      }
+
+      @Override
+      public Image getImage(Object element) {
+        if (!(element instanceof Message)) {
+          return super.getImage(element);
+        }
+        Image image = null;
+        switch (((Message) element).getImportance()) {
         case LOW:
-          cell.setImage(LOW_ICON);
+          image = LOW_ICON;
           break;
         case NORMAL:
-          cell.setImage(NORMAL_ICON);
+          image = NORMAL_ICON;
           break;
         case HIGH:
-          cell.setImage(HIGH_ICON);
+          image = HIGH_ICON;
           break;
         default:
-          // TODO sollte hier irgendetwas passieren?
+          image = null;
           break;
         }
-        cell.setText("");
+        return image;
       }
     });
-    importance.build();
 
     ColumnBuilder received = t.createColumn("Received");
     received.bindToProperty("received");
-    // received.bindToValue(MessageValues.RECEIVED);
     received.format(Formatter.forDate(SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)));
-    // alternativ: mit Uhrzeit
+    // -- alternativ: mit Uhrzeit
     // received.format(Formatter.forDate(SimpleDateFormat.getDateTimeInstance(2,
     // 3)));
     received.useAsDefaultSortColumn();
+    received.setPixelWidth(RECEIVED_PIXEL_WIDTH);
     received.build();
 
     ColumnBuilder read = t.createColumn("Read");
     read.bindToValue(MessageValues.READ);
+    read.setPixelWidth(READ_PIXEL_WIDTH);
     read.build();
 
     ColumnBuilder sender = t.createColumn("Sender");
-    // sender.bindToProperty("sender");
     sender.bindToValue(new BaseValue<Message>() {
       @Override
       public Object get(Message message) {
         return message.getSender().getEmail();
       }
     });
-
-    // sender.format(valueFormatter)
+    sender.setPercentWidth(SENDER_PERCENT_WIDTH);
     sender.build();
 
     ColumnBuilder recipients = t.createColumn("Recipients");
-    // recipients.bindToProperty("recipients");
     recipients.bindToValue(new BaseValue<Message>() {
       @Override
       public Object get(Message message) {
@@ -105,11 +137,12 @@ public class MaillistView extends ViewPart {
         return sb.toString();
       }
     });
+    recipients.setPercentWidth(RECIPIENTS_PERCENT_WIDTH);
     recipients.build();
 
     ColumnBuilder subject = t.createColumn("Subject");
     subject.bindToProperty("subject");
-    // subject.bindToValue(MessageValues.SUBJECT);
+    subject.setPercentWidth(SUBJECT_PERCENT_WIDTH);
     subject.build();
 
     t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
