@@ -3,18 +3,20 @@ package de.bht.fpa.mail.s791537.maillist;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import de.bht.fpa.mail.s000000.common.mail.model.Importance;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.ralfebert.rcputils.properties.BaseValue;
 import de.ralfebert.rcputils.tables.ColumnBuilder;
+import de.ralfebert.rcputils.tables.ICellFormatter;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
@@ -43,59 +45,56 @@ public class MaillistView extends ViewPart {
     ColumnBuilder importance = t.createColumn("Importance");
     importance.bindToProperty("importance");
     // ---- 1. Variante
-    // importance.format(new ICellFormatter() {
-    // @Override
-    // public void formatCell(ViewerCell cell, Object value) {
-    // switch ((Importance) value) {
-    // case LOW:
-    // cell.setImage(LOW_ICON);
-    // break;
-    // case NORMAL:
-    // cell.setImage(NORMAL_ICON);
-    // break;
-    // case HIGH:
-    // cell.setImage(HIGH_ICON);
-    // break;
-    // default:
-    // // TODO sollte hier irgendetwas passieren?
-    // break;
-    // }
-    // cell.setText("");
-    // }
-    // });
-    importance.setPixelWidth(IMPORTANCE_PIXEL_WIDTH);
-    // importance.build();
-
-    // ---- 2. Variante
-    importance.build().setLabelProvider(new ColumnLabelProvider() {
+    importance.format(new ICellFormatter() {
       @Override
-      public String getText(Object element) {
-        return null;
-      }
-
-      @Override
-      public Image getImage(Object element) {
-        if (!(element instanceof Message)) {
-          return super.getImage(element);
-        }
-        Image image = null;
-        switch (((Message) element).getImportance()) {
+      public void formatCell(ViewerCell cell, Object value) {
+        cell.setText("");
+        switch ((Importance) value) {
         case LOW:
-          image = LOW_ICON;
+          cell.setImage(LOW_ICON);
           break;
         case NORMAL:
-          image = NORMAL_ICON;
+          cell.setImage(NORMAL_ICON);
           break;
         case HIGH:
-          image = HIGH_ICON;
+          cell.setImage(HIGH_ICON);
           break;
         default:
-          image = null;
+          // TODO sollte hier irgendetwas passieren?
           break;
         }
-        return image;
       }
     });
+    importance.setPixelWidth(IMPORTANCE_PIXEL_WIDTH);
+    importance.build();
+
+    // ---- 2. Variante
+    // importance.build().setLabelProvider(new ColumnLabelProvider() {
+    // @Override
+    // public String getText(Object element) {
+    // return null;
+    // }
+    //
+    // @Override
+    // public Image getImage(Object element) {
+    // Image image = null;
+    // switch (((Message) element).getImportance()) {
+    // case LOW:
+    // image = LOW_ICON;
+    // break;
+    // case NORMAL:
+    // image = NORMAL_ICON;
+    // break;
+    // case HIGH:
+    // image = HIGH_ICON;
+    // break;
+    // default:
+    // image = null;
+    // break;
+    // }
+    // return image;
+    // }
+    // });
 
     ColumnBuilder received = t.createColumn("Received");
     received.bindToProperty("received");
