@@ -1,27 +1,25 @@
 package de.bht.fpa.mail.s791537.maillist;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.bht.fpa.mail.s000000.common.mail.model.Importance;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.ralfebert.rcputils.properties.BaseValue;
-import de.ralfebert.rcputils.tables.ColumnBuilder;
-import de.ralfebert.rcputils.tables.ICellFormatter;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
 public class MaillistView extends ViewPart {
-
   private static final int IMPORTANCE_PIXEL_WIDTH = 35;
   private static final int RECEIVED_PIXEL_WIDTH = 85;
   private static final int READ_PIXEL_WIDTH = 50;
@@ -35,94 +33,49 @@ public class MaillistView extends ViewPart {
       .createImage();
   private static final Image HIGH_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/high_importance-26.png").createImage();
+  private static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
   private TableViewer viewer;
 
   @Override
-  public void createPartControl(final Composite parent) {
+  public void createPartControl(Composite parent) {
 
     TableViewerBuilder t = new TableViewerBuilder(parent);
 
-    ColumnBuilder importance = t.createColumn("Importance");
-    importance.bindToProperty("importance");
-    // ---- 1. Variante
-    importance.format(new ICellFormatter() {
-      @Override
-      public void formatCell(ViewerCell cell, Object value) {
-        cell.setText("");
-        switch ((Importance) value) {
-        case LOW:
-          cell.setImage(LOW_ICON);
-          break;
-        case NORMAL:
-          cell.setImage(NORMAL_ICON);
-          break;
-        case HIGH:
-          cell.setImage(HIGH_ICON);
-          break;
-        default:
-          // TODO sollte hier irgendetwas passieren?
-          break;
-        }
-      }
-    });
-    importance.setPixelWidth(IMPORTANCE_PIXEL_WIDTH);
-    importance.build();
+    t.createColumn("Importance").bindToValue(MessageValues.IMPORTANCE).setPixelWidth(IMPORTANCE_PIXEL_WIDTH).build()
+        .setLabelProvider(new ColumnLabelProvider() {
+          @Override
+          public String getText(Object element) {
+            return null;
+          }
 
-    // ---- 2. Variante
-    // importance.build().setLabelProvider(new ColumnLabelProvider() {
-    // @Override
-    // public String getText(Object element) {
-    // return null;
-    // }
-    //
-    // @Override
-    // public Image getImage(Object element) {
-    // Image image = null;
-    // switch (((Message) element).getImportance()) {
-    // case LOW:
-    // image = LOW_ICON;
-    // break;
-    // case NORMAL:
-    // image = NORMAL_ICON;
-    // break;
-    // case HIGH:
-    // image = HIGH_ICON;
-    // break;
-    // default:
-    // image = null;
-    // break;
-    // }
-    // return image;
-    // }
-    // });
+          @Override
+          public Image getImage(Object element) {
+            switch (((Message) element).getImportance()) {
+            case LOW:
+              return LOW_ICON;
+            case NORMAL:
+              return NORMAL_ICON;
+            case HIGH:
+              return HIGH_ICON;
+            default:
+              return null;
+            }
+          }
+        });
 
-    ColumnBuilder received = t.createColumn("Received");
-    received.bindToProperty("received");
-    received.format(Formatter.forDate(SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM)));
-    // -- alternativ: mit Uhrzeit
-    // received.format(Formatter.forDate(SimpleDateFormat.getDateTimeInstance(2,
-    // 3)));
-    received.useAsDefaultSortColumn();
-    received.setPixelWidth(RECEIVED_PIXEL_WIDTH);
-    received.build();
+    t.createColumn("Received").bindToValue(MessageValues.RECEIVED).format(Formatter.forDate(DATE_FORMAT))
+        .useAsDefaultSortColumn().setPixelWidth(RECEIVED_PIXEL_WIDTH).build();
 
-    ColumnBuilder read = t.createColumn("Read");
-    read.bindToValue(MessageValues.READ);
-    read.setPixelWidth(READ_PIXEL_WIDTH);
-    read.build();
+    t.createColumn("Read").bindToValue(MessageValues.READ).setPixelWidth(READ_PIXEL_WIDTH).build();
 
-    ColumnBuilder sender = t.createColumn("Sender");
-    sender.bindToValue(new BaseValue<Message>() {
+    t.createColumn("Sender").bindToValue(new BaseValue<Message>() {
       @Override
       public Object get(Message message) {
         return message.getSender().getEmail();
       }
-    });
-    sender.setPercentWidth(SENDER_PERCENT_WIDTH);
-    sender.build();
+    }).setPercentWidth(SENDER_PERCENT_WIDTH).build();
 
-    ColumnBuilder recipients = t.createColumn("Recipients");
-    recipients.bindToValue(new BaseValue<Message>() {
+    t.createColumn("Recipients").bindToValue(new BaseValue<Message>() {
       @Override
       public Object get(Message message) {
         Iterator<Recipient> iter = message.getRecipients().iterator();
@@ -135,17 +88,48 @@ public class MaillistView extends ViewPart {
         }
         return sb.toString();
       }
-    });
-    recipients.setPercentWidth(RECIPIENTS_PERCENT_WIDTH);
-    recipients.build();
+    }).setPercentWidth(RECIPIENTS_PERCENT_WIDTH).build();
 
-    ColumnBuilder subject = t.createColumn("Subject");
-    subject.bindToProperty("subject");
-    subject.setPercentWidth(SUBJECT_PERCENT_WIDTH);
-    subject.build();
+    t.createColumn("Subject").bindToValue(MessageValues.SUBJECT).setPercentWidth(SUBJECT_PERCENT_WIDTH).build();
 
     t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
     viewer = t.getTableViewer();
+
+    // most recent messages at the top
+    viewer.getTable().setSortDirection(SWT.DOWN);
+
+    // TODO 5) Zusatzfunktion Suchfeld
+    // viewer.addFilter(new ViewerFilter() {
+    // @Override
+    // public boolean select(Viewer viewer, Object parentElement, Object
+    // element) {
+    //
+    // String searchString = "Free"; // TODO durch echten Suchstring ersetzen,
+    // // evtl. ingorecase
+    //
+    // // TODO instanceof-check
+    //
+    // Message message = (Message) element;
+    // List<String> strings = new LinkedList<String>();
+    // strings.add(message.getSubject());
+    // strings.add(message.getText());
+    // strings.add(DATE_FORMAT.format(message.getReceived()));
+    // strings.add(DATE_FORMAT.format(message.getSent()));
+    // for (Recipient recipient : message.getRecipients()) {
+    // strings.add(recipient.getEmail());
+    // strings.add(recipient.getPersonal());
+    // }
+    // strings.add(message.getSender().getEmail());
+    // strings.add(message.getSender().getPersonal());
+    //
+    // for (String string : strings) {
+    // if (string.contains(searchString)) {
+    // return true;
+    // }
+    // }
+    // return false;
+    // }
+    // });
   }
 
   @Override
