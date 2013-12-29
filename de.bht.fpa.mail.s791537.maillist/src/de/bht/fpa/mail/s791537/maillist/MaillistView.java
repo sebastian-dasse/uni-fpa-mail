@@ -2,7 +2,6 @@ package de.bht.fpa.mail.s791537.maillist;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -12,10 +11,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
-import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
-import de.ralfebert.rcputils.properties.BaseValue;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
@@ -62,34 +59,12 @@ public class MaillistView extends ViewPart {
             }
           }
         });
-
     t.createColumn("Received").bindToValue(MessageValues.RECEIVED).format(Formatter.forDate(DATE_FORMAT))
         .useAsDefaultSortColumn().setPixelWidth(RECEIVED_PIXEL_WIDTH).build();
-
     t.createColumn("Read").bindToValue(MessageValues.READ).setPixelWidth(READ_PIXEL_WIDTH).build();
-
-    t.createColumn("Sender").bindToValue(new BaseValue<Message>() {
-      @Override
-      public Object get(Message message) {
-        return message.getSender().getEmail();
-      }
-    }).setPercentWidth(SENDER_PERCENT_WIDTH).build();
-
-    t.createColumn("Recipients").bindToValue(new BaseValue<Message>() {
-      @Override
-      public Object get(Message message) {
-        Iterator<Recipient> iter = message.getRecipients().iterator();
-        StringBuilder sb = new StringBuilder();
-        if (iter.hasNext()) {
-          sb.append(iter.next().getEmail());
-        }
-        while (iter.hasNext()) {
-          sb.append(", ").append(iter.next().getEmail());
-        }
-        return sb.toString();
-      }
-    }).setPercentWidth(RECIPIENTS_PERCENT_WIDTH).build();
-
+    t.createColumn("Sender").bindToValue(MyMessageValues.SENDER_EMAIL).setPercentWidth(SENDER_PERCENT_WIDTH).build();
+    t.createColumn("Recipients").bindToValue(MyMessageValues.RECIPIENT_EMAIL).setPercentWidth(RECIPIENTS_PERCENT_WIDTH)
+        .build();
     t.createColumn("Subject").bindToValue(MessageValues.SUBJECT).setPercentWidth(SUBJECT_PERCENT_WIDTH).build();
 
     t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
