@@ -6,7 +6,7 @@
       <view
             class="de.bht.fpa.mail.s791537.fsnavigation.NavigationView"
             id="de.bht.fpa.mail.s791537.fsnavigation.NavigationView"
-            name="NavigationView"
+            name="File System"
             restorable="true">
       </view>
    </extension>
