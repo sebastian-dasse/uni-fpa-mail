@@ -53,7 +53,8 @@ public final class RootModel extends Observable {
   /**
    * Sets the base directory of the navigation tree to the specified path.
    * Afterwards the path is added to the history, which is then written to the
-   * hard drive. Finally all registered observers are being notified.
+   * hard drive. Finally all registered observers are being notified, passing
+   * this root as an argument.
    * 
    * @param path
    *          The new path for the base directory.

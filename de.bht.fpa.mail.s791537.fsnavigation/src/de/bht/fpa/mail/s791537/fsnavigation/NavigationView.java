@@ -56,6 +56,8 @@ public class NavigationView extends ViewPart implements Observer {
     });
 
     RootModel.getInstance().addObserver(this);
+
+    getSite().setSelectionProvider(viewer);
   }
 
   /**
@@ -73,6 +75,10 @@ public class NavigationView extends ViewPart implements Observer {
     viewer.getControl().setFocus();
   }
 
+  /**
+   * Updates the base directory of this view on change of the observed
+   * <code>RootModel</code>.
+   */
   @Override
   public void update(Observable o, Object arg) {
     viewer.setInput(arg);

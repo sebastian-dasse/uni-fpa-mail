@@ -2,28 +2,35 @@ package de.bht.fpa.mail.s791537.maillist;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
-import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
+import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
+import de.bht.fpa.mail.s791537.fsnavigation.RootModel;
+import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
-public class MaillistView extends ViewPart {
+public class MaillistView extends ViewPart implements ISelectionListener, Observer {
   private static final int IMPORTANCE_PIXEL_WIDTH = 35;
   private static final int RECEIVED_PIXEL_WIDTH = 85;
   private static final int READ_PIXEL_WIDTH = 50;
   private static final int SENDER_PERCENT_WIDTH = 25;
   private static final int RECIPIENTS_PERCENT_WIDTH = 25;
   private static final int SUBJECT_PERCENT_WIDTH = 50;
-  private static final int NUMBER_OF_MESSAGES = 50;
+  // private static final int NUMBER_OF_MESSAGES = 50;
   private static final Image LOW_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/low_importance-26.png").createImage();
   private static final Image NORMAL_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/ok-26.png")
@@ -67,7 +74,9 @@ public class MaillistView extends ViewPart {
         .build();
     t.createColumn("Subject").bindToValue(MessageValues.SUBJECT).setPercentWidth(SUBJECT_PERCENT_WIDTH).build();
 
-    t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
+    // t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
+    // t.setInput(RootModel.getInstance().getRoot().getMessages());
+    t.setInput(null);
     viewer = t.getTableViewer();
 
     // most recent messages at the top
@@ -105,10 +114,45 @@ public class MaillistView extends ViewPart {
     // return false;
     // }
     // });
+
+    getSite().getPage().addSelectionListener(this);
+
+    RootModel.getInstance().addObserver(this);
+
+    getSite().setSelectionProvider(viewer);
+  }
+
+  @Override
+  public void dispose() {
+    getSite().getPage().removeSelectionListener(this);
+    super.dispose();
   }
 
   @Override
   public void setFocus() {
     viewer.getControl().setFocus();
+  }
+
+  /**
+   * Updates the list of messages shown in this view as selected in the
+   * <code>NavigationView</code>.
+   */
+  @Override
+  public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+    TreeDirectory dir = SelectionHelper.handleStructuredSelection(selection, TreeDirectory.class);
+    if (dir == null) {
+      return;
+    }
+    viewer.setInput(dir.getMessages());
+  }
+
+  /**
+   * Clears the list of messages shown in this view on change of the observed
+   * <code>RootModel</code>.
+   */
+  @Override
+  public void update(Observable o, Object arg) {
+    // viewer.setInput(((TreeDirectory) arg).getMessages());
+    viewer.setInput(null);
   }
 }
