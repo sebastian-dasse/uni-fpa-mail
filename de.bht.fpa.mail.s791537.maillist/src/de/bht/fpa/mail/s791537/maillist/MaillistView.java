@@ -18,8 +18,7 @@ import org.eclipse.ui.part.ViewPart;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
-import de.bht.fpa.mail.s791537.fsnavigation.RootModel;
-import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
+import de.bht.fpa.mail.s791537.common.IMailProvider;
 import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
@@ -117,7 +116,11 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
 
     getSite().getPage().addSelectionListener(this);
 
-    RootModel.getInstance().addObserver(this);
+    /*
+     * TODO funktioniert nicht, wenn man die Dependency zu fsnavigation
+     * entfernt; dazu evtl. RootModel ins package ...common
+     */
+    // RootModel.getInstance().addObserver(this);
 
     getSite().setSelectionProvider(viewer);
   }
@@ -139,7 +142,9 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
    */
   @Override
   public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-    TreeDirectory dir = SelectionHelper.handleStructuredSelection(selection, TreeDirectory.class);
+    // TreeDirectory dir = SelectionHelper.handleStructuredSelection(selection,
+    // TreeDirectory.class);
+    IMailProvider dir = SelectionHelper.handleStructuredSelection(selection, IMailProvider.class);
     if (dir == null) {
       return;
     }

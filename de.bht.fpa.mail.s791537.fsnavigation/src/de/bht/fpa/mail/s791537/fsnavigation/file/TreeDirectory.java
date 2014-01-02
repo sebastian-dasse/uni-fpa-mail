@@ -9,11 +9,12 @@ import java.util.List;
 import javax.xml.bind.JAXB;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
+import de.bht.fpa.mail.s791537.common.IMailProvider;
 
 /**
  * This class represents a directory in a file tree.
  */
-public class TreeDirectory extends AbstractTreeFile {
+public class TreeDirectory extends AbstractTreeFile implements IMailProvider {
   /**
    * A list of all children directories of this directory.
    */

@@ -7,6 +7,6 @@ Bundle-Activator: de.bht.fpa.mail.s791537.maillist.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  de.bht.fpa.mail.common;bundle-version="1.0.3",
- de.bht.fpa.mail.s791537.fsnavigation
+ de.bht.fpa.mail.s791537.common;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
