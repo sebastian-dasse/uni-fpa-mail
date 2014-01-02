@@ -5,20 +5,17 @@ import java.util.Set;
 import de.bht.fpa.mail.s000000.common.filter.FilterOperator;
 import de.bht.fpa.mail.s000000.common.filter.StringCompareHelper;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
-import de.bht.fpa.mail.s000000.common.mail.model.Sender;
 
-public class SenderFilter extends StringFilter {
+public class TextFilter extends StringFilter {
 
-  public SenderFilter(String searchString, FilterOperator filterOperator) {
+  public TextFilter(String searchString, FilterOperator filterOperator) {
     super(searchString, filterOperator);
   }
 
   @Override
   public Set<Message> filter(Iterable<Message> messagesToFilter) {
     for (Message message : messagesToFilter) {
-      Sender sender = message.getSender();
-      if (StringCompareHelper.matches(sender.getEmail().toLowerCase(), searchString, filterOperator)
-          || StringCompareHelper.matches(sender.getPersonal().toLowerCase(), searchString, filterOperator)) {
+      if (StringCompareHelper.matches(message.getText().toLowerCase(), searchString, filterOperator)) {
         filteredMessages.add(message);
       }
     }
