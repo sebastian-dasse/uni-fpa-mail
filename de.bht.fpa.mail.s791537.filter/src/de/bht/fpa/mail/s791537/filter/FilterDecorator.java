@@ -10,5 +10,4 @@ public abstract class FilterDecorator implements IFilter {
   public FilterDecorator(List<IFilter> filters) {
     this.filters = filters;
   }
-
 }

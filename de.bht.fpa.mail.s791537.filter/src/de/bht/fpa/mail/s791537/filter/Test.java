@@ -1,8 +1,10 @@
 package de.bht.fpa.mail.s791537.filter;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.bht.fpa.mail.s000000.common.filter.FilterOperator;
 import de.bht.fpa.mail.s000000.common.filter.IFilter;
@@ -15,28 +17,52 @@ import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 public class Test {
   public static void main(String[] args) {
     Iterable<Message> messages = new RandomTestDataProvider(100).getMessages();
-    print(test1(messages));
+    // print(test1(messages));
+    // System.out.println();
+    // print(test2(messages));
+    // System.out.println();
+    print(test3(messages));
     System.out.println();
-    print(test2(messages));
+    print(test4(messages));
   }
 
+  // intersection
   private static Iterable<Message> test1(Iterable<Message> messages) {
     messages = new SenderFilter("tulle", FilterOperator.CONTAINS).filter(messages);
     messages = new RecipientsFilter(".de", FilterOperator.ENDS_WITH).filter(messages);
     messages = new SubjectFilter("All for nothing", FilterOperator.IS).filter(messages);
     messages = new ImportanceFilter(Importance.LOW).filter(messages);
-
     return messages;
   }
 
   private static Iterable<Message> test2(Iterable<Message> messages) {
     List<IFilter> filters = new LinkedList<IFilter>();
-    filters.add(new SenderFilter("tulle", FilterOperator.CONTAINS));
+    filters.add(new SenderFilter("karl", FilterOperator.CONTAINS));
     filters.add(new RecipientsFilter(".de", FilterOperator.ENDS_WITH));
     filters.add(new SubjectFilter("All for nothing", FilterOperator.IS));
     filters.add(new ImportanceFilter(Importance.LOW));
-    messages = new IntersectionFilter(filters).filter(messages);
-    return messages;
+    return new IntersectionFilter(filters).filter(messages);
+  }
+
+  // union
+  private static Iterable<Message> test3(Iterable<Message> messages) {
+    Set<Message> filteredMessages = new HashSet<Message>();
+    filteredMessages.addAll(new SenderFilter("karl stulle", FilterOperator.IS).filter(messages));
+    // filteredMessages.addAll(new RecipientsFilter(".de",
+    // FilterOperator.ENDS_WITH).filter(messages));
+    filteredMessages.addAll(new SubjectFilter("All for nothing", FilterOperator.IS).filter(messages));
+    // filteredMessages.addAll(new
+    // ImportanceFilter(Importance.LOW).filter(messages));
+    return filteredMessages;
+  }
+
+  private static Iterable<Message> test4(Iterable<Message> messages) {
+    List<IFilter> filters = new LinkedList<IFilter>();
+    filters.add(new SenderFilter("karl stulle", FilterOperator.IS));
+    // filters.add(new RecipientsFilter(".de", FilterOperator.ENDS_WITH));
+    filters.add(new SubjectFilter("All for nothing", FilterOperator.IS));
+    // filters.add(new ImportanceFilter(Importance.LOW));
+    return new UnionFilter(filters).filter(messages);
   }
 
   private static void print(Iterable<Message> messages) {

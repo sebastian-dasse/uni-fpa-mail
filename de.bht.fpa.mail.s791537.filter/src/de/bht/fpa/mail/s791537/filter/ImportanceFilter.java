@@ -24,5 +24,4 @@ public class ImportanceFilter implements IFilter {
     }
     return filteredMessages;
   }
-
 }

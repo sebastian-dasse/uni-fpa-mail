@@ -34,5 +34,4 @@ public class RecipientsFilter implements IFilter {
     }
     return filteredMessages;
   }
-
 }
