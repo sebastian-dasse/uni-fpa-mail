@@ -151,6 +151,7 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     viewer.setInput(dir.getMessages());
   }
 
+  // TODO not used, if this is not added as observer to the RootModel
   /**
    * Clears the list of messages shown in this view on change of the observed
    * <code>RootModel</code>.
