@@ -1,9 +1,8 @@
 package de.bht.fpa.mail.s791537.maillist;
 
-import java.util.Iterator;
-
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
+import de.bht.fpa.mail.s000000.common.mail.model.Sender;
 import de.ralfebert.rcputils.properties.BaseValue;
 import de.ralfebert.rcputils.properties.IValue;
 
@@ -15,7 +14,8 @@ public final class MyMessageValues {
   public static final IValue SENDER_EMAIL = new BaseValue<Message>() {
     @Override
     public Object get(Message message) {
-      return message.getSender().getEmail();
+      Sender sender = message.getSender();
+      return sender.getPersonal() + " <" + sender.getEmail() + ">";
     }
   };
 
@@ -23,14 +23,10 @@ public final class MyMessageValues {
     @Override
     public Object get(Message message) {
       StringBuilder sb = new StringBuilder();
-      Iterator<Recipient> iter = message.getRecipients().iterator();
-      if (iter.hasNext()) {
-        sb.append(iter.next().getEmail());
+      for (Recipient recipient : message.getRecipients()) {
+        sb.append(recipient.getPersonal()).append(" <").append(recipient.getEmail()).append(">, ");
       }
-      while (iter.hasNext()) {
-        sb.append(", ").append(iter.next().getEmail());
-      }
-      return sb.toString();
+      return sb.substring(0, sb.length() - 2);
     }
   };
 }
