@@ -2,20 +2,31 @@ package de.bht.fpa.mail.s791537.maillist;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
+import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.bht.fpa.mail.s791537.common.IMailProvider;
@@ -23,6 +34,9 @@ import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
 public class MaillistView extends ViewPart implements ISelectionListener, Observer {
+  public MaillistView() {
+  }
+
   private static final int IMPORTANCE_PIXEL_WIDTH = 35;
   private static final int RECEIVED_PIXEL_WIDTH = 85;
   private static final int READ_PIXEL_WIDTH = 50;
@@ -38,14 +52,31 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
       "icons/high_importance-26.png").createImage();
   private static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
   private TableViewer viewer;
+  private Text searchText;
+  private String searchString = "";
 
   @Override
   public void createPartControl(Composite parent) {
 
-    TableViewerBuilder t = new TableViewerBuilder(parent);
+    parent.setLayout(new GridLayout(2, false));
+
+    Label searchLabel = new Label(parent, SWT.NONE);
+    searchLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+    searchLabel.setText("Search:");
+
+    searchText = new Text(parent, SWT.BORDER);
+    searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+    Composite tableArea = new Composite(parent, SWT.NONE);
+    GridData gdTableArea = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+    // gdTableArea.heightHint = 31;
+    tableArea.setLayoutData(gdTableArea);
+
+    TableViewerBuilder t = new TableViewerBuilder(tableArea);
 
     t.createColumn("Importance").bindToValue(MessageValues.IMPORTANCE).setPixelWidth(IMPORTANCE_PIXEL_WIDTH).build()
         .setLabelProvider(new ColumnLabelProvider() {
+
           @Override
           public String getText(Object element) {
             return null;
@@ -73,46 +104,46 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
         .build();
     t.createColumn("Subject").bindToValue(MessageValues.SUBJECT).setPercentWidth(SUBJECT_PERCENT_WIDTH).build();
 
-    // t.setInput(new RandomTestDataProvider(NUMBER_OF_MESSAGES).getMessages());
-    // t.setInput(RootModel.getInstance().getRoot().getMessages());
     t.setInput(null);
     viewer = t.getTableViewer();
 
     // most recent messages at the top
     viewer.getTable().setSortDirection(SWT.DOWN);
 
-    // TODO 5) Zusatzfunktion Suchfeld
-    // viewer.addFilter(new ViewerFilter() {
-    // @Override
-    // public boolean select(Viewer viewer, Object parentElement, Object
-    // element) {
-    //
-    // String searchString = "Free"; // TODO durch echten Suchstring ersetzen,
-    // // evtl. ingorecase
-    //
-    // // TODO instanceof-check
-    //
-    // Message message = (Message) element;
-    // List<String> strings = new LinkedList<String>();
-    // strings.add(message.getSubject());
-    // strings.add(message.getText());
-    // strings.add(DATE_FORMAT.format(message.getReceived()));
-    // strings.add(DATE_FORMAT.format(message.getSent()));
-    // for (Recipient recipient : message.getRecipients()) {
-    // strings.add(recipient.getEmail());
-    // strings.add(recipient.getPersonal());
-    // }
-    // strings.add(message.getSender().getEmail());
-    // strings.add(message.getSender().getPersonal());
-    //
-    // for (String string : strings) {
-    // if (string.contains(searchString)) {
-    // return true;
-    // }
-    // }
-    // return false;
-    // }
-    // });
+    searchText.addKeyListener(new KeyAdapter() {
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        searchString = searchText.getText().toLowerCase();
+        viewer.refresh();
+      }
+    });
+
+    viewer.addFilter(new ViewerFilter() {
+
+      @Override
+      public boolean select(Viewer viewer, Object parentElement, Object element) {
+        Message message = (Message) element;
+        List<String> strings = new LinkedList<String>();
+        strings.add(message.getSubject());
+        strings.add(message.getText());
+        strings.add(DATE_FORMAT.format(message.getReceived()));
+        strings.add(DATE_FORMAT.format(message.getSent()));
+        for (Recipient recipient : message.getRecipients()) {
+          strings.add(recipient.getEmail());
+          strings.add(recipient.getPersonal());
+        }
+        strings.add(message.getSender().getEmail());
+        strings.add(message.getSender().getPersonal());
+
+        for (String string : strings) {
+          if (string.toLowerCase().contains(searchString)) {
+            return true;
+          }
+        }
+        return false;
+      }
+    });
 
     getSite().getPage().addSelectionListener(this);
 
