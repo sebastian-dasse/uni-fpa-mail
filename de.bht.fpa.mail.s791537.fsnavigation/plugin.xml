@@ -72,7 +72,7 @@
          <menu
                id="de.bht.fpa.mail.s791537.fsnavigation.menus.sampleMenu"
                label="FS Navigation"
-               mnemonic="M">
+               mnemonic="N">
             <command
                   commandId="de.bht.fpa.mail.s791537.fsnavigation.commands.setBaseDirectory"
                   id="de.bht.fpa.mail.s791537.fsnavigation.menus.setBaseDirectory"

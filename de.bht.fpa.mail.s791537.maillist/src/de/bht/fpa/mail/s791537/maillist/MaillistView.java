@@ -2,19 +2,15 @@ package de.bht.fpa.mail.s791537.maillist;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,11 +18,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
-import de.bht.fpa.mail.s000000.common.mail.model.Recipient;
 import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
 import de.bht.fpa.mail.s000000.common.table.MessageValues;
 import de.bht.fpa.mail.s791537.common.IMailProvider;
@@ -50,7 +48,7 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
       .createImage();
   private static final Image HIGH_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/high_importance-26.png").createImage();
-  private static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
+  static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
   private TableViewer viewer;
   private Text searchText;
   private String searchString = "";
@@ -110,40 +108,26 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // most recent messages at the top
     viewer.getTable().setSortDirection(SWT.DOWN);
 
-    searchText.addKeyListener(new KeyAdapter() {
+    // searchText.addKeyListener(new KeyAdapter() {
+    //
+    // @Override
+    // public void keyPressed(KeyEvent e) {
+    // searchString = searchText.getText().toLowerCase();
+    // viewer.refresh();
+    // }
+    // });
+
+    searchText.addModifyListener(new ModifyListener() {
 
       @Override
-      public void keyPressed(KeyEvent e) {
+      public void modifyText(ModifyEvent e) {
         searchString = searchText.getText().toLowerCase();
         viewer.refresh();
       }
     });
 
-    viewer.addFilter(new ViewerFilter() {
-
-      @Override
-      public boolean select(Viewer viewer, Object parentElement, Object element) {
-        Message message = (Message) element;
-        List<String> strings = new LinkedList<String>();
-        strings.add(message.getSubject());
-        strings.add(message.getText());
-        strings.add(DATE_FORMAT.format(message.getReceived()));
-        strings.add(DATE_FORMAT.format(message.getSent()));
-        for (Recipient recipient : message.getRecipients()) {
-          strings.add(recipient.getEmail());
-          strings.add(recipient.getPersonal());
-        }
-        strings.add(message.getSender().getEmail());
-        strings.add(message.getSender().getPersonal());
-
-        for (String string : strings) {
-          if (string.toLowerCase().contains(searchString)) {
-            return true;
-          }
-        }
-        return false;
-      }
-    });
+    // fast filtering as you type
+    viewer.addFilter(new FastViewerFilter(searchText));
 
     getSite().getPage().addSelectionListener(this);
 
@@ -154,6 +138,15 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // RootModel.getInstance().addObserver(this);
 
     getSite().setSelectionProvider(viewer);
+
+    final IWorkbench workbench = PlatformUI.getWorkbench();
+    ICommandService commandService = (ICommandService) workbench.getService(ICommandService.class);
+
+    // configurable filter
+    viewer.addFilter(new ConfigurableViewerFilter());
+
+    // commandService.addExecutionListener(new ExecutionListener(viewer));
+    commandService.addExecutionListener(new ExecutionListener(viewer));
   }
 
   @Override
