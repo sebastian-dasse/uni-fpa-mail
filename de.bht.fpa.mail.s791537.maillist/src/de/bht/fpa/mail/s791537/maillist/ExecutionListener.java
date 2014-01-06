@@ -9,6 +9,9 @@ import org.eclipse.jface.viewers.ViewerFilter;
 
 import de.bht.fpa.mail.s000000.common.filter.IFilter;
 
+/**
+ * Listens to all (!) executed commands.
+ */
 public class ExecutionListener implements IExecutionListener {
   private final StructuredViewer viewer;
 
@@ -26,6 +29,7 @@ public class ExecutionListener implements IExecutionListener {
 
   @Override
   public void postExecuteSuccess(String commandId, Object returnValue) {
+
     if (!(returnValue instanceof IFilter)) {
       return;
     }
