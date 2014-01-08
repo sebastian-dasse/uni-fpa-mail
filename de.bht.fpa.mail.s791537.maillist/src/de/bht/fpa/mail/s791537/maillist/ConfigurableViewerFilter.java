@@ -10,20 +10,14 @@ import de.bht.fpa.mail.s000000.common.filter.IFilter;
 import de.bht.fpa.mail.s000000.common.filter.NullFilter;
 import de.bht.fpa.mail.s000000.common.mail.model.Message;
 
+/**
+ * Allows to use any IFilter as ViewerFilter.
+ */
 public class ConfigurableViewerFilter extends ViewerFilter {
   private IFilter filter;
 
   public ConfigurableViewerFilter() {
-
-    // TODO Null-Filter implementieren und hier einsetzen, oder so ok?
     this.filter = new NullFilter();
-    // this.filter = new IFilter() {
-    //
-    // @Override
-    // public Set<Message> filter(Iterable<Message> messagesToFilter) {
-    // return new HashSet<Message>();
-    // }
-    // };
   }
 
   public void setFilter(IFilter filter) {

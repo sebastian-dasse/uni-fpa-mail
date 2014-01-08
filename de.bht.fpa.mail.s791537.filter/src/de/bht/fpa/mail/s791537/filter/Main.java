@@ -12,7 +12,7 @@ import de.ralfebert.rcputils.properties.BaseValue;
 import de.ralfebert.rcputils.properties.IValue;
 
 public final class Main {
-  private static final int NUMBER_OF_MESSAGES = 10;
+  private static final int NUMBER_OF_MESSAGES = 25;
 
   private Main() {
   }
@@ -28,9 +28,11 @@ public final class Main {
     // printAll(test3(messages));
     // printAll(test4(messages));
 
-    printAll(test5(messages), MessageValues.READ);
-    printAll(test6(messages), MessageValues.RECIPIENT);
-    printAll(test7(messages), MessageValues.RECIPIENT);
+    // printAll(test5(messages), MessageValues.READ);
+    // printAll(test6(messages), MessageValues.RECIPIENT);
+    // printAll(test7(messages), MessageValues.RECIPIENT);
+    printAll(test8(messages), MessageValues.SUBJECT);
+    printAll(test9(messages), MessageValues.SUBJECT);
   }
 
   public static Iterable<Message> test0(Iterable<Message> messages) {
@@ -95,8 +97,17 @@ public final class Main {
         .filter(messages);
   }
 
+  private static Iterable<Message> test8(Iterable<Message> messages) {
+    return new IntersectionFilter(new SubjectFilter("free", FilterOperator.CONTAINS)).filter(messages);
+  }
+
+  private static Iterable<Message> test9(Iterable<Message> messages) {
+    return new UnionFilter(new SubjectFilter("free", FilterOperator.CONTAINS)).filter(messages);
+  }
+
   @SuppressWarnings("unchecked")
   public static void printAll(Iterable<Message> messages, IValue... vals) {
+    System.out.println("-----------------------------------------");
     int count = 0;
     for (Message message : messages) {
       for (IValue val : vals) {
@@ -105,7 +116,9 @@ public final class Main {
       System.out.println(message);
       count++;
     }
+    System.out.println("-----------------------------------------");
     System.out.println(count + " messages");
+    System.out.println("-----------------------------------------");
     System.out.println();
   }
 }

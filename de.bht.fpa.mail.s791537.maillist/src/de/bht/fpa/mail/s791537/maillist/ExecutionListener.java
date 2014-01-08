@@ -34,10 +34,8 @@ public class ExecutionListener implements IExecutionListener {
       return;
     }
     IFilter filter = (IFilter) returnValue;
-    // viewer.addFilter(new ConfigurableViewerFilter(filter));
 
-    System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
-
+    // System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
     for (ViewerFilter viewerFilter : viewer.getFilters()) {
       if (viewerFilter instanceof ConfigurableViewerFilter) {
         // viewer.removeFilter(viewerFilter);
@@ -45,14 +43,8 @@ public class ExecutionListener implements IExecutionListener {
         ((ConfigurableViewerFilter) viewerFilter).setFilter(filter);
       }
     }
-    // viewer.addFilter(new ConfigurableViewerFilter(filter));
+    // System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
 
-    System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
-
-    // TODO Filter wieder entfernen, Null-Filter
-    // viewer.removeFilter(filter);
-
-    // System.out.println(viewer.getFilters().length);
     viewer.refresh();
   }
 

@@ -12,6 +12,11 @@
             id="de.bht.fpa.mail.s791537.filter.commands.configureFilter"
             name="Configure Filter">
       </command>
+      <command
+            categoryId="de.bht.fpa.mail.s791537.filter.commands.category"
+            id="de.bht.fpa.mail.s791537.filter.commands.clearFilter"
+            name="Clear Filter">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -19,7 +24,13 @@
             commandId="de.bht.fpa.mail.s791537.filter.commands.configureFilter"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+C">
+            sequence="M3+M2+F">
+      </key>
+      <key
+            commandId="de.bht.fpa.mail.s791537.filter.commands.clearFilter"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+M2+C">
       </key>
    </extension>
    <extension
@@ -35,6 +46,12 @@
                   id="de.bht.fpa.mail.s791537.filter.toolbars.configureFilter"
                   tooltip="Say hello world">
             </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.filter.commands.clearFilter"
+                  icon="icons/sample.gif"
+                  id="de.bht.fpa.mail.s791537.filter.toolbars.clearFilter"
+                  tooltip="Say hello world">
+            </command>
          </toolbar>
       </menuContribution>
       <menuContribution
@@ -46,6 +63,11 @@
             <command
                   commandId="de.bht.fpa.mail.s791537.filter.commands.configureFilter"
                   id="de.bht.fpa.mail.s791537.filter.menus.configureFilter"
+                  mnemonic="F">
+            </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.filter.commands.clearFilter"
+                  id="de.bht.fpa.mail.s791537.filter.menus.clearFilter"
                   mnemonic="C">
             </command>
          </menu>
@@ -56,6 +78,10 @@
       <handler
             class="de.bht.fpa.mail.s791537.filter.handlers.ConfigureFilterHandler"
             commandId="de.bht.fpa.mail.s791537.filter.commands.configureFilter">
+      </handler>
+      <handler
+            class="de.bht.fpa.mail.s791537.filter.handlers.ClearFilterHandler"
+            commandId="de.bht.fpa.mail.s791537.filter.commands.clearFilter">
       </handler>
    </extension>
 

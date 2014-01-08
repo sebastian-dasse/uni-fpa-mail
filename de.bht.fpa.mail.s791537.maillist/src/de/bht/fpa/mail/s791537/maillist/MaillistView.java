@@ -108,6 +108,7 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // most recent messages at the top
     viewer.getTable().setSortDirection(SWT.DOWN);
 
+    // -- ModifyListener seems to work better
     // searchText.addKeyListener(new KeyAdapter() {
     //
     // @Override

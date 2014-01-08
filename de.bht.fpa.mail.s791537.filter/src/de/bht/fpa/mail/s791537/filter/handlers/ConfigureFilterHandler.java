@@ -11,7 +11,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import de.bht.fpa.mail.s000000.common.filter.FilterCombination;
 import de.bht.fpa.mail.s000000.common.filter.FilterDialog;
-import de.bht.fpa.mail.s000000.common.filter.FilterGroupType;
 import de.bht.fpa.mail.s000000.common.filter.FilterOperator;
 import de.bht.fpa.mail.s000000.common.filter.FilterType;
 import de.bht.fpa.mail.s000000.common.filter.IFilter;
@@ -29,8 +28,8 @@ public class ConfigureFilterHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    // TODO Auto-generated method stub
 
+    // TODO remove
     System.out.println("handle configureFilter command");
 
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
@@ -41,18 +40,12 @@ public class ConfigureFilterHandler extends AbstractHandler {
     if (filterCombinations == null) {
       return null;
     }
-    FilterGroupType filterGroupType = dialog.getFilterGroupType();
-
-    IFilter filter = null;
 
     List<IFilter> filters = new LinkedList<IFilter>();
-
     for (FilterCombination filterCombination : filterCombinations) {
-      // System.out.println(filterCombination.getClass());
-
       FilterType filterType = filterCombination.getFilterType();
-      FilterOperator filterOperator = filterCombination.getFilterOperator();
       Object filterValue = filterCombination.getFilterValue();
+      FilterOperator filterOperator = filterCombination.getFilterOperator();
 
       switch (filterType) {
       case SENDER:
@@ -78,27 +71,19 @@ public class ConfigureFilterHandler extends AbstractHandler {
       }
     }
 
-    switch (filterGroupType) {
+    switch (dialog.getFilterGroupType()) {
     case INTERSECTION:
-      filter = new IntersectionFilter(filters.toArray(new IFilter[filters.size()]));
-      break;
+
+      // TODO remove
+      System.out.println("> set IntersectionFilter");
+      return new IntersectionFilter(filters.toArray(new IFilter[filters.size()]));
     case UNION:
-      filter = new UnionFilter(filters.toArray(new IFilter[filters.size()]));
-      break;
+
+      // TODO remove
+      System.out.println("> set UnionFilter");
+      return new UnionFilter(filters.toArray(new IFilter[filters.size()]));
     default:
-      break;
+      return null;
     }
-
-    // IFilter filter = new IFilter() {
-    //
-    // @Override
-    // public Set<Message> filter(Iterable<Message> messagesToFilter) {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
-    //
-    // };
-
-    return filter;
   }
 }

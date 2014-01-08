@@ -21,7 +21,16 @@ public class FastViewerFilter extends ViewerFilter {
 
   @Override
   public boolean select(Viewer viewer, Object parentElement, Object element) {
-    Message message = (Message) element;
+    final String searchString = searchText.getText().toLowerCase();
+    for (String string : listFieldsToBeCompared((Message) element)) {
+      if (string.toLowerCase().contains(searchString)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private List<String> listFieldsToBeCompared(Message message) {
     List<String> strings = new LinkedList<String>();
     strings.add(message.getSubject());
     strings.add(message.getText());
@@ -33,13 +42,6 @@ public class FastViewerFilter extends ViewerFilter {
     }
     strings.add(message.getSender().getEmail());
     strings.add(message.getSender().getPersonal());
-
-    final String searchString = searchText.getText().toLowerCase();
-    for (String string : strings) {
-      if (string.toLowerCase().contains(searchString)) {
-        return true;
-      }
-    }
-    return false;
+    return strings;
   }
 }

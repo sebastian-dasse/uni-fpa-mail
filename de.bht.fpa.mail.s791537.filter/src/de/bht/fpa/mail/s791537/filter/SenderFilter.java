@@ -1,5 +1,6 @@
 package de.bht.fpa.mail.s791537.filter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import de.bht.fpa.mail.s000000.common.filter.FilterOperator;
@@ -15,6 +16,7 @@ public class SenderFilter extends StringFilter {
 
   @Override
   public Set<Message> filter(Iterable<Message> messagesToFilter) {
+    Set<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messagesToFilter) {
       Sender sender = message.getSender();
       if (StringCompareHelper.matches(sender.getEmail().toLowerCase(), searchString, filterOperator)
