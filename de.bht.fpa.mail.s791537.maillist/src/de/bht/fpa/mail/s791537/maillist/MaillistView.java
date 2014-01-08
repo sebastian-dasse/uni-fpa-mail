@@ -9,6 +9,8 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
@@ -32,8 +34,11 @@ import de.ralfebert.rcputils.tables.TableViewerBuilder;
 import de.ralfebert.rcputils.tables.format.Formatter;
 
 public class MaillistView extends ViewPart implements ISelectionListener, Observer {
+
   public MaillistView() {
   }
+
+  static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
 
   private static final int IMPORTANCE_PIXEL_WIDTH = 35;
   private static final int RECEIVED_PIXEL_WIDTH = 85;
@@ -48,7 +53,7 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
       .createImage();
   private static final Image HIGH_ICON = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
       "icons/high_importance-26.png").createImage();
-  static final DateFormat DATE_FORMAT = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
+
   private TableViewer viewer;
   private Text searchText;
   private String searchString = "";
@@ -108,16 +113,8 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // most recent messages at the top
     viewer.getTable().setSortDirection(SWT.DOWN);
 
-    // -- ModifyListener seems to work better
-    // searchText.addKeyListener(new KeyAdapter() {
-    //
-    // @Override
-    // public void keyPressed(KeyEvent e) {
-    // searchString = searchText.getText().toLowerCase();
-    // viewer.refresh();
-    // }
-    // });
-
+    // fast filtering as you type
+    viewer.addFilter(new FastViewerFilter(searchText));
     searchText.addModifyListener(new ModifyListener() {
 
       @Override
@@ -127,8 +124,18 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
       }
     });
 
-    // fast filtering as you type
-    viewer.addFilter(new FastViewerFilter(searchText));
+    // reset fast filter with Escape key
+    searchText.addKeyListener(new KeyAdapter() {
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        if (e.keyCode == SWT.ESC) {
+          searchText.setText("");
+        }
+        // searchString = searchText.getText().toLowerCase();
+        viewer.refresh();
+      }
+    });
 
     getSite().getPage().addSelectionListener(this);
 

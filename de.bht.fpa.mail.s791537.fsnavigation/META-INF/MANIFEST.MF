@@ -10,5 +10,3 @@ Require-Bundle: org.eclipse.ui,
  de.bht.fpa.mail.s791537.common;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: de.bht.fpa.mail.s791537.fsnavigation,
- de.bht.fpa.mail.s791537.fsnavigation.file
