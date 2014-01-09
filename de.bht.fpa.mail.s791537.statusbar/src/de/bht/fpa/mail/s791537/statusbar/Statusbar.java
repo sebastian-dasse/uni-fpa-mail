@@ -15,6 +15,13 @@ public class Statusbar implements IStartup {
     IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
     if (window != null) {
       System.out.println("HI");
+
+      // IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+      // configurer.setInitialSize(new Point(WIDTH, HEIGHT));
+      // IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+      // configurer.setInitialSize(new Point(WIDTH, HEIGHT));
+      // configurer.setShowCoolBar(false);
+      // configurer.setShowStatusLine(false);
     }
   }
 }
