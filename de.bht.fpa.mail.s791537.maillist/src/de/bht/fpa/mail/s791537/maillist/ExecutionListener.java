@@ -29,22 +29,15 @@ public class ExecutionListener implements IExecutionListener {
 
   @Override
   public void postExecuteSuccess(String commandId, Object returnValue) {
-
     if (!(returnValue instanceof IFilter)) {
       return;
     }
     IFilter filter = (IFilter) returnValue;
-
-    // System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
     for (ViewerFilter viewerFilter : viewer.getFilters()) {
       if (viewerFilter instanceof ConfigurableViewerFilter) {
-        // viewer.removeFilter(viewerFilter);
-        // viewerFilter = new ConfigurableViewerFilter(filter);
         ((ConfigurableViewerFilter) viewerFilter).setFilter(filter);
       }
     }
-    // System.out.println(">>>>>>>>>>>>>> " + viewer.getFilters().length);
-
     viewer.refresh();
   }
 

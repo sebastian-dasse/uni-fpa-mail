@@ -72,7 +72,6 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
 
     Composite tableArea = new Composite(parent, SWT.NONE);
     GridData gdTableArea = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-    // gdTableArea.heightHint = 31;
     tableArea.setLayoutData(gdTableArea);
 
     TableViewerBuilder t = new TableViewerBuilder(tableArea);
@@ -174,8 +173,6 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
    */
   @Override
   public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-    // TreeDirectory dir = SelectionHelper.handleStructuredSelection(selection,
-    // TreeDirectory.class);
     IMailProvider dir = SelectionHelper.handleStructuredSelection(selection, IMailProvider.class);
     if (dir == null) {
       return;
@@ -190,7 +187,6 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
    */
   @Override
   public void update(Observable o, Object arg) {
-    // viewer.setInput(((TreeDirectory) arg).getMessages());
     viewer.setInput(null);
   }
 }
