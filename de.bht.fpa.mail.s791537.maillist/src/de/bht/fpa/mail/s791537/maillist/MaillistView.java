@@ -57,7 +57,8 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
 
   private TableViewer viewer;
   private Text searchText;
-  private String searchString = ""; // TODO remove, if not used
+
+  // private String searchString;
 
   @Override
   public void createPartControl(Composite parent) {
@@ -116,17 +117,14 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // fast filtering as you type
     viewer.addFilter(new FastViewerFilter(searchText));
     searchText.addModifyListener(new ModifyListener() {
-
       @Override
       public void modifyText(ModifyEvent e) {
-        searchString = searchText.getText().toLowerCase();
         viewer.refresh();
       }
     });
 
     // reset fast filter with Escape key
     searchText.addKeyListener(new KeyAdapter() {
-
       @Override
       public void keyPressed(KeyEvent e) {
         if (e.keyCode == SWT.ESC) {
