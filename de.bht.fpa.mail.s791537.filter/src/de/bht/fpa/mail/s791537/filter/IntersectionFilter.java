@@ -15,8 +15,6 @@ public class IntersectionFilter extends FilterDecorator {
   @Override
   public Set<Message> filter(Iterable<Message> messagesToFilter) {
     Set<Message> filteredMessages = new HashSet<Message>();
-    // filteredMessages.addAll((Collection<? extends Message>)
-    // messagesToFilter);
     for (Message message : messagesToFilter) {
       filteredMessages.add(message);
     }

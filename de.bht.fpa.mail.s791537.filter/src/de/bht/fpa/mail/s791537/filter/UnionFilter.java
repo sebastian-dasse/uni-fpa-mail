@@ -15,6 +15,9 @@ public class UnionFilter extends FilterDecorator {
   @Override
   public Set<Message> filter(Iterable<Message> messagesToFilter) {
     Set<Message> filteredMessages = new HashSet<Message>();
+    if (filters.length == 0) {
+      filteredMessages.addAll(new NullFilter().filter(messagesToFilter));
+    }
     for (IFilter filter : filters) {
       filteredMessages.addAll(filter.filter(messagesToFilter));
     }
