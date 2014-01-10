@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
@@ -154,11 +153,11 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
     // commandService.addExecutionListener(new ExecutionListener(viewer));
     commandService.addExecutionListener(new ExecutionListener(viewer));
 
-    // TODO test
-    System.out.println("maillist: workbench: " + workbench);
-    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-    System.out.println("maillist: window: " + window);
-    System.out.println("maillist: active page: " + window.getActivePage());
+    // TODO test, remove when finished
+    // System.out.println("maillist: workbench: " + workbench);
+    // IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+    // System.out.println("maillist: window: " + window);
+    // System.out.println("maillist: active page: " + window.getActivePage());
   }
 
   @Override
