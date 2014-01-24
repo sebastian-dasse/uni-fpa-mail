@@ -3,9 +3,7 @@ package de.bht.fpa.mail.s791537.imapnavigation;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import de.bht.fpa.mail.s000000.common.mail.model.Account;
-import de.bht.fpa.mail.s000000.common.mail.model.BaseEntity;
-import de.bht.fpa.mail.s000000.common.mail.model.Folder;
+import de.bht.fpa.mail.s791537.common.ITreeElement;
 
 public class ImapTreeContentProvider implements ITreeContentProvider {
 
@@ -24,17 +22,10 @@ public class ImapTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public Object[] getChildren(Object parentElement) {
-    if (!(parentElement instanceof BaseEntity)) {
+    if (!(parentElement instanceof ITreeElement)) {
       return new Object[0];
     }
-    FolderGetter getter = new FolderGetter();
-    if (parentElement instanceof Account) {
-      getter.setStrategy(new AccountStrategy());
-    }
-    if (parentElement instanceof Folder) {
-      getter.setStrategy(new FolderStrategy());
-    }
-    return getter.getFolders((BaseEntity) parentElement);
+    return ((ITreeElement) parentElement).getChildren();
   }
 
   @Override
@@ -44,13 +35,10 @@ public class ImapTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public boolean hasChildren(Object element) {
-    if (element instanceof Account) {
-      return getChildren(element).length > 0;
-    }
-    if (!(element instanceof AbstractImapNode)) {
+    if (!(element instanceof ITreeElement)) {
       return false;
     }
-    return ((AbstractImapNode) element).hasChildren();
+    return ((ITreeElement) element).hasChildren();
   }
 
 }

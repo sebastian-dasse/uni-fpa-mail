@@ -16,4 +16,9 @@ public interface ITreeElement {
    *         <code>ITreeElement</code>, or an empty array for no children.
    */
   Object[] getChildren();
+
+  /**
+   * @return The name of this <code>ITreeElement</code>.
+   */
+  String getName();
 }

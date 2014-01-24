@@ -1,19 +1,14 @@
 package de.bht.fpa.mail.s791537.fsnavigation;
 
-import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import de.bht.fpa.mail.s000000.common.mail.model.Message;
-import de.bht.fpa.mail.s000000.common.rcp.selection.SelectionHelper;
-import de.bht.fpa.mail.s791537.fsnavigation.file.TreeDirectory;
+import de.bht.fpa.mail.s791537.common.TreeSelectionChangedListener;
 
 public class NavigationView extends ViewPart implements Observer {
   private TreeViewer viewer;
@@ -39,21 +34,7 @@ public class NavigationView extends ViewPart implements Observer {
     // when the user expands tree items.
     viewer.setInput(createModel());
 
-    viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-      @Override
-      public void selectionChanged(SelectionChangedEvent event) {
-        TreeDirectory dir = SelectionHelper.handleStructuredSelectionEvent(event, TreeDirectory.class);
-        if (dir == null) {
-          return;
-        }
-        Collection<Message> messages = dir.getMessages();
-        System.out.println("Selected directory: " + dir.getPath());
-        System.out.println("Number of messages: " + messages.size());
-        for (Message message : messages) {
-          System.out.println(message.toShortString());
-        }
-      }
-    });
+    viewer.addSelectionChangedListener(new TreeSelectionChangedListener());
 
     RootModel.getInstance().addObserver(this);
 

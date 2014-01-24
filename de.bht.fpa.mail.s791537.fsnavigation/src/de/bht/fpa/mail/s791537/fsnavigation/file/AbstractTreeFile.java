@@ -54,8 +54,10 @@ public abstract class AbstractTreeFile implements ITreeElement {
   /**
    * @return The name of this <code>AbstractTreeFile</code>.
    */
+  @Override
   public String getName() {
     return file.getName();
+    // return file.getPath();
   }
 
   /**
@@ -67,6 +69,7 @@ public abstract class AbstractTreeFile implements ITreeElement {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[file=\"" + file.toString() + "\"]";
+    // return getClass().getSimpleName() + "[file=\"" + file.toString() + "\"]";
+    return file.getPath();
   }
 }

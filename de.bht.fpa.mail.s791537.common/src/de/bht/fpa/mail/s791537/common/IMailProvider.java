@@ -6,11 +6,17 @@ import de.bht.fpa.mail.s000000.common.mail.model.Message;
 
 /**
  * An interface which ensures that implementing classes are able to provide a
- * collection of <code>Message</code>s and know their path.
+ * collection of <code>Message</code>s and their name.
  */
 public interface IMailProvider {
 
+  /**
+   * @return A <code>Collection&lt;Message&gt;</code>.
+   */
   Collection<Message> getMessages();
 
-  String getPath();
+  /**
+   * @return The name of this <code>IMailProvider</code>.
+   */
+  String getName();
 }
