@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="de.bht.fpa.mail.s791537.imapnavigation.ImapView"
+            id="de.bht.fpa.mail.s791537.imapnavigation.ImapView"
+            name="IMAP Navigation"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="de.bht.fpa.mail.s791537.main.perspective">
+         <view
+               id="de.bht.fpa.mail.s791537.imapnavigation.ImapView"
+               minimized="false"
+               relationship="stack"
+               relative="de.bht.fpa.mail.s791537.main.perspective.left">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>

@@ -1,6 +1,6 @@
 package de.bht.fpa.mail.s791537.fsnavigation;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -46,7 +46,7 @@ public class NavigationView extends ViewPart implements Observer {
         if (dir == null) {
           return;
         }
-        List<Message> messages = dir.getMessages();
+        Collection<Message> messages = dir.getMessages();
         System.out.println("Selected directory: " + dir.getPath());
         System.out.println("Number of messages: " + messages.size());
         for (Message message : messages) {

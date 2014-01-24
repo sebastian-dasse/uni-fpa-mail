@@ -18,7 +18,7 @@ public class ViewContentProvider implements ITreeContentProvider {
    */
   @Override
   public Object[] getChildren(Object parentElement) {
-    if (!(parentElement instanceof AbstractTreeFile) || !hasChildren(parentElement)) {
+    if (!hasChildren(parentElement)) {
       return new Object[0];
     }
     return ((AbstractTreeFile) parentElement).getChildren();

@@ -2,6 +2,8 @@ package de.bht.fpa.mail.s791537.fsnavigation.file;
 
 import java.io.File;
 
+import de.bht.fpa.mail.s791537.common.ITreeElement;
+
 /**
  * This abstract class represents a file in a file tree. It is basically a
  * wrapped up <code>java.io.File</code>.
@@ -11,7 +13,7 @@ import java.io.File;
  * <code>Object</code> array. Both methods act as if there were no children and
  * must be overwritten if any other behaviour is desired.
  */
-public abstract class AbstractTreeFile {
+public abstract class AbstractTreeFile implements ITreeElement {
   /**
    * The path of this <code>AbstractTreeFile</code>.
    */
@@ -35,6 +37,7 @@ public abstract class AbstractTreeFile {
    * @return <code>true</code> if this <code>AbstractTreeFile</code> has
    *         children, otherwise <code>false</code>.
    */
+  @Override
   public boolean hasChildren() {
     return false;
   }
@@ -43,6 +46,7 @@ public abstract class AbstractTreeFile {
    * @return An Object array containing the children of this
    *         <code>AbstractTreeFile</code>, or an empty array for no children.
    */
+  @Override
   public Object[] getChildren() {
     return new Object[0];
   }
