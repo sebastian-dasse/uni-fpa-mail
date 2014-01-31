@@ -12,7 +12,6 @@ import org.eclipse.ui.part.ViewPart;
 import de.bht.fpa.mail.s000000.common.mail.imapsync.ImapHelper;
 import de.bht.fpa.mail.s000000.common.mail.model.Account;
 import de.bht.fpa.mail.s791537.common.TreeSelectionChangedListener;
-import de.bht.fpa.mail.s791537.imapnavigation.node.AccountNode;
 import de.bht.fpa.mail.s791537.imapnavigation.node.Accounts;
 
 public class ImapView extends ViewPart {
@@ -30,30 +29,24 @@ public class ImapView extends ViewPart {
     getSite().setSelectionProvider(viewer);
 
     Job.getJobManager().addJobChangeListener(new JobChangeAdapter() {
-
-      @Override
-      public void running(IJobChangeEvent event) {
-        if ("my job".equals(event.getJob().getName())) {
-          System.out.println("running");
-        }
-      }
-
       @Override
       public void done(IJobChangeEvent event) {
-
         String jobName = event.getJob().getName();
-        if ("my job".equals(jobName)) {
-          System.out.println(jobName + " done");
+        if ("Synchronize IMAP".equals(jobName)) {
+          System.out.println("IMAP synchronization done");
 
           // viewer.setInput(new AccountNode(event.getJob().get));
           Display.getDefault().asyncExec(new Runnable() {
 
             @Override
             public void run() {
-              Account account = ImapHelper.getAccount("bhtfpa");
-              System.out.println("[view]: account: " + account);
+              Account remote = ImapHelper.getAccount("bhtfpa");
+              // System.out.println("[view]: account: " + remote);
 
-              viewer.setInput(new AccountNode(account));
+              // viewer.setInput(new AccountNode(remote));
+              // viewer.setInput(accounts);
+              viewer.setInput(createModel());
+              // viewer.refresh();
             }
 
           });
@@ -64,18 +57,16 @@ public class ImapView extends ViewPart {
 
   private Object createModel() {
     Accounts accounts = new Accounts();
-    // accounts.addDummyAccount("Beuth-IMAP");
-    // accounts.addDummyAccount("Beuth-IMAP2");
+    accounts.addDummyAccount("Beuth-IMAP");
+    accounts.addDummyAccount("Beuth-IMAP2");
 
     Account remote = ImapHelper.getAccount("bhtfpa");
     if (remote == null) {
-      System.out.println("account = null");
       remote = Accounts.generateGoogleAccount();
-      System.out.println("remote = " + remote);
-      ImapHelper.saveAccount(remote);
-      System.out.println("remote saved");
+      // ImapHelper.saveAccount(remote);
+      // System.out.println("remote saved");
     } else {
-      System.out.println(remote.getHost());
+      // System.out.println("[view]: account = " + remote.getName());
     }
     accounts.addAccount(remote);
 
