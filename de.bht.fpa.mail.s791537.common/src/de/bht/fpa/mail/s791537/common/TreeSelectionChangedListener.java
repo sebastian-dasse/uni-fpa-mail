@@ -16,6 +16,7 @@ public class TreeSelectionChangedListener implements ISelectionChangedListener {
     if (dir == null) {
       return;
     }
+    System.out.println(); // start with blank line
     System.out.println("Selected directory: " + dir);
     if (dir instanceof IMailProvider) {
       Collection<Message> messages = ((IMailProvider) dir).getMessages();

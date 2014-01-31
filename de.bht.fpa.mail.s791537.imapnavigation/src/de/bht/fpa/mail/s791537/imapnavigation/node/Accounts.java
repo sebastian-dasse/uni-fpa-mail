@@ -82,7 +82,7 @@ public class Accounts implements ITreeElement {
   public static Account generateGoogleAccount() {
     //@formatter:off
     return newAccountBuilder()
-      .name("bhtfpa")
+      .name("FPA-Mail")
       .host("imap.gmail.com")
       .username("bhtfpa@gmail.com")
       .password("B-BgxkT_anr2bubbyTLM")

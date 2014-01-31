@@ -1,5 +1,8 @@
 package de.bht.fpa.mail.s791537.imapnavigation;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -16,6 +19,7 @@ import de.bht.fpa.mail.s791537.imapnavigation.node.Accounts;
 
 public class ImapView extends ViewPart {
   private TreeViewer viewer;
+  private Accounts accounts;
 
   @Override
   public void createPartControl(Composite parent) {
@@ -32,67 +36,55 @@ public class ImapView extends ViewPart {
       @Override
       public void done(IJobChangeEvent event) {
         String jobName = event.getJob().getName();
-        if ("Synchronize IMAP".equals(jobName)) {
-          System.out.println("IMAP synchronization done");
-
-          // viewer.setInput(new AccountNode(event.getJob().get));
+        switch (jobName) {
+        case "Synchronize IMAP":
           Display.getDefault().asyncExec(new Runnable() {
-
             @Override
             public void run() {
-              Account remote = ImapHelper.getAccount("bhtfpa");
-              // System.out.println("[view]: account: " + remote);
-
-              // viewer.setInput(new AccountNode(remote));
-              // viewer.setInput(accounts);
+              System.out.println("IMAP synchronization done");
               viewer.setInput(createModel());
-              // viewer.refresh();
             }
-
           });
+          break;
+        case "Get IMAP":
+          Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+              System.out.println("IMAP account loaded");
+              viewer.setInput(accounts);
+            }
+          });
+          break;
+        default:
+          break;
+
         }
       }
     });
   }
 
   private Object createModel() {
-    Accounts accounts = new Accounts();
-    accounts.addDummyAccount("Beuth-IMAP");
-    accounts.addDummyAccount("Beuth-IMAP2");
+    accounts = new Accounts();
+    accounts.addDummyAccount("IMAP-Dummy");
+    // accounts.addDummyAccount("IMAP-Dummy2");
 
-    Account remote = ImapHelper.getAccount("bhtfpa");
-    if (remote == null) {
-      remote = Accounts.generateGoogleAccount();
-      // ImapHelper.saveAccount(remote);
-      // System.out.println("remote saved");
-    } else {
-      // System.out.println("[view]: account = " + remote.getName());
-    }
-    accounts.addAccount(remote);
+    Job job = new Job("Get IMAP") {
+      @Override
+      protected IStatus run(IProgressMonitor monitor) {
+        System.out.println("Loading IMAP account...");
 
-    // accounts.addGoogleAccount();
-    //
-    // Object o = accounts.getChildren()[0];
-    // if (!(o instanceof Account)) {
-    // System.out.println(o.getClass().getName());
-    // // throw new RuntimeException();
-    // }
-    // if (!(o instanceof AccountNode)) {
-    // System.out.println(o.getClass().getName());
-    // // throw new RuntimeException();
-    // } else {
-    // System.out.println(((AccountNode) o).getName());
-    // }
-
-    // ImapHelper.saveAccount((Account) o);
-    //
-    // Account account = ImapHelper.getAccount("Beuth-IMAP");
-    // if (account != null) {
-    // System.out.println(account.getHost());
-    // } else {
-    // System.out.println("account = null");
-    // }
-
+        Account remote = ImapHelper.getAccount("FPA-Mail");
+        if (remote == null) {
+          // System.out.println("Loading IMAP account...");
+          remote = Accounts.generateGoogleAccount();
+          ImapHelper.saveAccount(remote);
+        }
+        accounts.addAccount(remote);
+        return Status.OK_STATUS;
+      }
+    };
+    // job.setUser(true);
+    job.schedule();
     return accounts;
   }
 

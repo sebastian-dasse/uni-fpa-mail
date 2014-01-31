@@ -16,27 +16,21 @@ public class SynchronizeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    // if
-    // (!event.getCommand().getId().equals("de.bht.fpa.mail.s791537.imapnavigation.commands.synchronize"))
-    // {
-    // return Status.OK_STATUS;
-    // }
-
     Job job = new Job("Synchronize IMAP") {
       @Override
       protected IStatus run(IProgressMonitor monitor) {
         System.out.println("Synchronizing IMAP...");
-        Account remote = ImapHelper.getAccount("bhtfpa");
-        // if (remote != null) {
-        try {
-          ImapHelper.syncAllFoldersToAccount(remote, monitor);
-          System.out.println(">>>>> synced");
-          ImapHelper.saveAccount(remote);
-          System.out.println(">>>>> saved");
-        } catch (SynchronizationException e) {
-          e.printStackTrace();
+        Account remote = ImapHelper.getAccount("FPA-Mail");
+        if (remote != null) {
+          try {
+            ImapHelper.syncAllFoldersToAccount(remote, monitor);
+            ImapHelper.saveAccount(remote);
+          } catch (SynchronizationException e) {
+            e.printStackTrace();
+          }
+        } else {
+          System.err.println("You must load the account before you can synchronize.");
         }
-        // }
         return Status.OK_STATUS;
       }
     };
