@@ -32,10 +32,10 @@ public class Accounts implements ITreeElement {
     return accounts.toArray();
   }
 
-  public void addDummyAccount() {
+  public void addDummyAccount(String name) {
     //@formatter:off
     addAccount(newAccountBuilder()
-      .name("Beuth-IMAP")
+      .name(name)
       .host("imap.beuth-hochschule.de")
       .username("seb")
       .password("sebsecrete")
@@ -63,6 +63,30 @@ public class Accounts implements ITreeElement {
             .fullName("Sent")
             .builtMessages(new RandomTestDataProvider(15).getMessages())
       ).build());
+    //@formatter:on
+  }
+
+  public void addGoogleAccount() {
+    addAccount(generateGoogleAccount());
+
+//    //@formatter:off
+//    addAccount(newAccountBuilder()
+//      .name("FPA")
+//      .host("imap.gmail.com")
+//      .username("bhtfpa@gmail.com2")
+//      .password("B-BgxkT_anr2bubbyTLM")
+//      .build());
+//    //@formatter:on
+  }
+
+  public static Account generateGoogleAccount() {
+    //@formatter:off
+    return newAccountBuilder()
+      .name("bhtfpa")
+      .host("imap.gmail.com")
+      .username("bhtfpa@gmail.com")
+      .password("B-BgxkT_anr2bubbyTLM")
+      .build();
     //@formatter:on
   }
 

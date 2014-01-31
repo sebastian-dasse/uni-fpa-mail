@@ -23,7 +23,7 @@ public class FastViewerFilter extends ViewerFilter {
   public boolean select(Viewer viewer, Object parentElement, Object element) {
     final String searchString = searchText.getText().toLowerCase();
     for (String string : listFieldsToBeCompared((Message) element)) {
-      if (string.toLowerCase().contains(searchString)) {
+      if (string != null && string.toLowerCase().contains(searchString)) {
         return true;
       }
     }

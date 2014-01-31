@@ -27,5 +27,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     configurer.setShowCoolBar(false);
     configurer.setShowStatusLine(false);
     configurer.setTitle("FPA Mailer SD"); //$NON-NLS-1$
+
+    // used for progress monitoring for imap sync
+    configurer.setShowProgressIndicator(true);
   }
 }
