@@ -6,12 +6,19 @@ import static de.bht.fpa.mail.s000000.common.mail.model.builder.Builders.newFold
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.bht.fpa.mail.s000000.common.mail.model.Account;
 import de.bht.fpa.mail.s000000.common.mail.testdata.RandomTestDataProvider;
 import de.bht.fpa.mail.s791537.common.ITreeElement;
 
+@XmlRootElement
 public class Accounts implements ITreeElement {
 
+  private static final int MAX_NUM_DUMMY_MESSAGES = 25;
+
+  @XmlElement(name = "accountNode")
   private final Collection<AccountNode> accounts;
 
   public Accounts() {
@@ -32,9 +39,20 @@ public class Accounts implements ITreeElement {
     return accounts.toArray();
   }
 
-  public void addDummyAccount(String name) {
+  public static Account generateGoogleAccount() {
     //@formatter:off
-    addAccount(newAccountBuilder()
+    return newAccountBuilder()
+        .name("FPA-Mail")
+        .host("imap.gmail.com")
+        .username("bhtfpa@gmail.com")
+        .password("B-BgxkT_anr2bubbyTLM")
+        .build();
+    //@formatter:on
+  }
+
+  public static Account generateDummyAccount(String name) {
+    //@formatter:off
+    return newAccountBuilder()
       .name(name)
       .host("imap.beuth-hochschule.de")
       .username("seb")
@@ -42,51 +60,30 @@ public class Accounts implements ITreeElement {
       .folder(
           newFolderBuilder()
             .fullName("INBOX")
-            .builtMessages(new RandomTestDataProvider(20).getMessages())
+            .builtMessages(new RandomTestDataProvider((int) (Math.random() * MAX_NUM_DUMMY_MESSAGES) + 1).getMessages())
             .folder(
                 newFolderBuilder()
                   .fullName("Customers")
-                  .builtMessages(new RandomTestDataProvider(10).getMessages())
+                  .builtMessages(
+                      new RandomTestDataProvider((int) (Math.random() * MAX_NUM_DUMMY_MESSAGES) + 1).getMessages())
             )
             .folder(
                 newFolderBuilder()
                   .fullName("Friends")
-                  .builtMessages(new RandomTestDataProvider(3).getMessages())
+                  .builtMessages(
+                      new RandomTestDataProvider((int) (Math.random() * MAX_NUM_DUMMY_MESSAGES) + 1).getMessages())
             )
             .folder(
                 newFolderBuilder()
                   .fullName("Family")
-                  .builtMessages(new RandomTestDataProvider(5).getMessages())
+                  .builtMessages(
+                      new RandomTestDataProvider((int) (Math.random() * MAX_NUM_DUMMY_MESSAGES) + 1).getMessages())
             )
       ).folder(
           newFolderBuilder()
             .fullName("Sent")
-            .builtMessages(new RandomTestDataProvider(15).getMessages())
-      ).build());
-    //@formatter:on
-  }
-
-  public void addGoogleAccount() {
-    addAccount(generateGoogleAccount());
-
-//    //@formatter:off
-//    addAccount(newAccountBuilder()
-//      .name("FPA")
-//      .host("imap.gmail.com")
-//      .username("bhtfpa@gmail.com2")
-//      .password("B-BgxkT_anr2bubbyTLM")
-//      .build());
-//    //@formatter:on
-  }
-
-  public static Account generateGoogleAccount() {
-    //@formatter:off
-    return newAccountBuilder()
-      .name("FPA-Mail")
-      .host("imap.gmail.com")
-      .username("bhtfpa@gmail.com")
-      .password("B-BgxkT_anr2bubbyTLM")
-      .build();
+            .builtMessages(new RandomTestDataProvider((int) (Math.random() * MAX_NUM_DUMMY_MESSAGES) + 1).getMessages())
+      ).build();
     //@formatter:on
   }
 

@@ -57,7 +57,6 @@ public class ImapView extends ViewPart {
           break;
         default:
           break;
-
         }
       }
     });
@@ -65,8 +64,8 @@ public class ImapView extends ViewPart {
 
   private Object createModel() {
     accounts = new Accounts();
-    accounts.addDummyAccount("IMAP-Dummy");
-    // accounts.addDummyAccount("IMAP-Dummy2");
+    accounts.addAccount(Accounts.generateDummyAccount("IMAP-Dummy"));
+    // accounts.addAccount(Accounts.generateDummyAccount("IMAP-Dummy2"));
 
     Job job = new Job("Get IMAP") {
       @Override
