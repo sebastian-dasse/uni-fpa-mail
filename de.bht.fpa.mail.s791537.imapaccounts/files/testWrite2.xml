@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<accounts>
+    <accountNode>
+        <account>
+            <host>imap.beuth-hochschule.de</host>
+            <name>Testkonto</name>
+            <password>sebsecrete</password>
+            <username>seb</username>
+        </account>
+    </accountNode>
+    <accountNode>
+        <account>
+            <host>imap.beuth-hochschule.de</host>
+            <name>Testkonto2</name>
+            <password>sebsecrete</password>
+            <username>seb</username>
+        </account>
+    </accountNode>
+</accounts>

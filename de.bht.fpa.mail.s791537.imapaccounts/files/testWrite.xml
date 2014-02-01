@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<account>
+    <host>imap.beuth-hochschule.de</host>
+    <name>Testkonto</name>
+    <password>sebsecrete</password>
+    <username>seb</username>
+</account>

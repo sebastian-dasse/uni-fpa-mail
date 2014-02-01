@@ -1,0 +1,81 @@
+package de.bht.fpa.mail.s791537.imapaccounts;
+
+import java.io.File;
+
+import javax.xml.bind.DataBindingException;
+import javax.xml.bind.JAXB;
+
+import de.bht.fpa.mail.s000000.common.mail.model.Account;
+import de.bht.fpa.mail.s791537.imapnavigation.node.AccountNode;
+import de.bht.fpa.mail.s791537.imapnavigation.node.Accounts;
+
+public class Test {
+  public static void main(String[] args) {
+    // testReadXML("files/testRead.xml");
+    // String writePath = testWriteXML("files/testWrite.xml");
+    // testReadXML(writePath);
+
+    // testReadXML("files/testRead2.xml");
+    String writePath = testWriteAccountsToXML("files/testWrite2.xml");
+    Accounts accounts = testReadAccountsFromXML(writePath);
+    printAccounts(accounts);
+    System.out.println("Done");
+  }
+
+  private static void printAccounts(Accounts accounts) {
+    for (Object o : accounts.getChildren()) {
+      // System.out.println(((AccountNode) o).getAccount());
+      Account a = ((AccountNode) o).getAccount();
+      System.out.println(a);
+    }
+    System.out.println("---");
+  }
+
+  public static void testReadXML(String filename) {
+    File xmlFile = new File(filename);
+    try {
+      Account account = JAXB.unmarshal(xmlFile, Account.class);
+      System.out.println(account);
+    } catch (DataBindingException e) {
+      System.err.println("File '" + xmlFile + "' not found");
+    }
+  }
+
+  public static String testWriteXML(String filename) {
+    Account account = Accounts.generateDummyAccount("Testkonto");
+    account.getFolders().clear();
+
+    File xmlFile = new File(filename);
+    JAXB.marshal(account, xmlFile);
+    return filename;
+  }
+
+  public static Accounts testReadAccountsFromXML(String filename) {
+    Accounts accounts = null;
+    File xmlFile = new File(filename);
+
+    try {
+      accounts = JAXB.unmarshal(xmlFile, Accounts.class);
+      // System.out.println(accounts);
+    } catch (DataBindingException e) {
+      System.err.println("File '" + xmlFile + "' not found");
+    }
+    return accounts;
+  }
+
+  public static String testWriteAccountsToXML(String filename) {
+    Accounts accounts = new Accounts();
+
+    Account account = Accounts.generateDummyAccount("Testkonto");
+    account.getFolders().clear();
+    accounts.addAccount(account);
+
+    Account account2 = Accounts.generateDummyAccount("Testkonto2");
+    account2.getFolders().clear();
+    accounts.addAccount(account2);
+
+    File xmlFile = new File(filename);
+    JAXB.marshal(accounts, xmlFile);
+    return filename;
+  }
+}
