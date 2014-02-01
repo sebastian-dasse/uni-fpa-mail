@@ -11,27 +11,26 @@ import de.bht.fpa.mail.s791537.imapnavigation.node.Accounts;
 
 public class Test {
   public static void main(String[] args) {
-    // testReadXML("files/testRead.xml");
-    // String writePath = testWriteXML("files/testWrite.xml");
-    // testReadXML(writePath);
+    readXML("files/testReadAccount.xml");
+    System.out.println("---");
+    String writePath = writeXML("files/testWriteAccount.xml");
+    readXML(writePath);
+    System.out.println("---");
 
-    // testReadXML("files/testRead2.xml");
-    String writePath = testWriteAccountsToXML("files/testWrite2.xml");
-    Accounts accounts = testReadAccountsFromXML(writePath);
-    printAccounts(accounts);
+    printAccounts(readAccountsFromXML("files/testAccounts.xml"));
+    String writePath2 = writeAccountsToXML("files/testAccounts.xml");
+    printAccounts(readAccountsFromXML(writePath2));
     System.out.println("Done");
   }
 
   private static void printAccounts(Accounts accounts) {
     for (Object o : accounts.getChildren()) {
-      // System.out.println(((AccountNode) o).getAccount());
-      Account a = ((AccountNode) o).getAccount();
-      System.out.println(a);
+      System.out.println(((AccountNode) o).getAccount());
     }
     System.out.println("---");
   }
 
-  public static void testReadXML(String filename) {
+  public static void readXML(String filename) {
     File xmlFile = new File(filename);
     try {
       Account account = JAXB.unmarshal(xmlFile, Account.class);
@@ -41,7 +40,7 @@ public class Test {
     }
   }
 
-  public static String testWriteXML(String filename) {
+  public static String writeXML(String filename) {
     Account account = Accounts.generateDummyAccount("Testkonto");
     account.getFolders().clear();
 
@@ -50,7 +49,7 @@ public class Test {
     return filename;
   }
 
-  public static Accounts testReadAccountsFromXML(String filename) {
+  public static Accounts readAccountsFromXML(String filename) {
     Accounts accounts = null;
     File xmlFile = new File(filename);
 
@@ -63,7 +62,7 @@ public class Test {
     return accounts;
   }
 
-  public static String testWriteAccountsToXML(String filename) {
+  public static String writeAccountsToXML(String filename) {
     Accounts accounts = new Accounts();
 
     Account account = Accounts.generateDummyAccount("Testkonto");
