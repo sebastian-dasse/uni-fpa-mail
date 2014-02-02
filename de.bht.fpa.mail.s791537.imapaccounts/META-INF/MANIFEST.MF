@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Imapaccounts
-Bundle-SymbolicName: de.bht.fpa.mail.s791537.imapaccounts
+Bundle-SymbolicName: de.bht.fpa.mail.s791537.imapaccounts;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: de.bht.fpa.mail.s791537.imapaccounts.Activator
 Require-Bundle: org.eclipse.ui,

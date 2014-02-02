@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="de.bht.fpa.mail.s791537.imapaccounts.commands.category"
+            name="Sample Category">
+      </category>
+      <command
+            category="de.bht.fpa.mail.s791537.imapaccounts.commands.category"
+            id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+            name="Configure">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+C">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="de.bht.fpa.mail.s791537.imapaccounts.menus.accountMenu"
+               label="Accounts"
+               mnemonic="A">
+            <command
+                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+                  mnemonic="C">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="de.bht.fpa.mail.s791537.imapaccount.toolbars.accountToolbar">
+            <command
+                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+                  icon="icons/sample.gif"
+                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
+                  tooltip="Say hello world">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="de.bht.fpa.mail.s791537.imapaccounts.handlers.ConfigureHandler"
+            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure">
+      </handler>
+   </extension>
+
+</plugin>

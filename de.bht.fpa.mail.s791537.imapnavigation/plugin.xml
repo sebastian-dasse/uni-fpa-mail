@@ -55,7 +55,7 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               id="de.bht.fpa.mail.s791537.imapnavigation.menus.sampleMenu"
+               id="de.bht.fpa.mail.s791537.imapnavigation.menus.imapMenu"
                label="IMAP"
                mnemonic="I">
             <command
