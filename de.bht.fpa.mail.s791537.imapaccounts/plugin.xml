@@ -9,18 +9,19 @@
       </category>
       <command
             category="de.bht.fpa.mail.s791537.imapaccounts.commands.category"
-            id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-            name="Configure">
+            id="de.bht.fpa.mail.s791537.imapaccounts.commands.add"
+            name="Add">
       </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M2+C">
-      </key>
+      <command
+            category="de.bht.fpa.mail.s791537.imapaccounts.commands.category"
+            id="de.bht.fpa.mail.s791537.imapaccounts.commands.edit"
+            name="Edit">
+      </command>
+      <command
+            category="de.bht.fpa.mail.s791537.imapaccounts.commands.category"
+            id="de.bht.fpa.mail.s791537.imapaccounts.commands.delete"
+            name="Delete">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -31,30 +32,36 @@
                label="Accounts"
                mnemonic="A">
             <command
-                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-                  mnemonic="C">
+                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.add"
+                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.add"
+                  mnemonic="A">
+            </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.edit"
+                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.edit"
+                  mnemonic="E">
+            </command>
+            <command
+                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.delete"
+                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.delete"
+                  mnemonic="D">
             </command>
          </menu>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="de.bht.fpa.mail.s791537.imapaccount.toolbars.accountToolbar">
-            <command
-                  commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-                  icon="icons/sample.gif"
-                  id="de.bht.fpa.mail.s791537.imapaccounts.commands.configure"
-                  tooltip="Say hello world">
-            </command>
-         </toolbar>
       </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="de.bht.fpa.mail.s791537.imapaccounts.handlers.ConfigureHandler"
-            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.configure">
+            class="de.bht.fpa.mail.s791537.imapaccounts.handlers.AddHandler"
+            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.add">
+      </handler>
+      <handler
+            class="de.bht.fpa.mail.s791537.imapaccounts.handlers.EditHandler"
+            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.edit">
+      </handler>
+      <handler
+            class="de.bht.fpa.mail.s791537.imapaccounts.handlers.DeleteHandler"
+            commandId="de.bht.fpa.mail.s791537.imapaccounts.commands.delete">
       </handler>
    </extension>
 

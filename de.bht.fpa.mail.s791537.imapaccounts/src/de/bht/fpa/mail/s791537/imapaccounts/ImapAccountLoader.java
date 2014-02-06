@@ -29,4 +29,12 @@ public class ImapAccountLoader {
     }
     return accounts;
   }
+
+  public static void save(Accounts accounts, String filename) {
+    try {
+      JAXB.marshal(accounts, new File(filename));
+    } catch (DataBindingException e) {
+      System.err.println("Failed writing to '" + filename + "'");
+    }
+  }
 }

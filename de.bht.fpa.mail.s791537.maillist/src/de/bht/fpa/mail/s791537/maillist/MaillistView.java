@@ -144,13 +144,11 @@ public class MaillistView extends ViewPart implements ISelectionListener, Observ
 
     getSite().setSelectionProvider(viewer);
 
-    final IWorkbench workbench = PlatformUI.getWorkbench();
-    ICommandService commandService = (ICommandService) workbench.getService(ICommandService.class);
-
     // configurable filter
     viewer.addFilter(new ConfigurableViewerFilter());
 
-    // commandService.addExecutionListener(new ExecutionListener(viewer));
+    final IWorkbench workbench = PlatformUI.getWorkbench();
+    ICommandService commandService = (ICommandService) workbench.getService(ICommandService.class);
     commandService.addExecutionListener(new ExecutionListener(viewer));
 
     // TODO test, remove when finished

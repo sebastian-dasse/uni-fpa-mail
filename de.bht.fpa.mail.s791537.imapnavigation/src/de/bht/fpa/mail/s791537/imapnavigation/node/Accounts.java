@@ -29,6 +29,26 @@ public class Accounts implements ITreeElement {
     accounts.add(new AccountNode(account));
   }
 
+  public void removeAccount(Account account) {
+    accounts.remove(new AccountNode(account));
+  }
+
+  public void removeAccountNode(AccountNode accountNode) {
+    accounts.remove(accountNode);
+  }
+
+  /**
+   * Removes the first account in the list matching the specified name.
+   */
+  public void removeAccount(String accountName) {
+    for (AccountNode node : accounts) {
+      if (node.getAccount().getName().equals(accountName)) {
+        removeAccountNode(node);
+        // accounts.remove(node);
+      }
+    }
+  }
+
   @Override
   public boolean hasChildren() {
     return accounts.size() > 0;

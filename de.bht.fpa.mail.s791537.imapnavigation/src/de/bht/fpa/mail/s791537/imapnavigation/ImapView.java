@@ -10,6 +10,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
 
 import de.bht.fpa.mail.s000000.common.mail.imapsync.ImapHelper;
@@ -31,6 +34,10 @@ public class ImapView extends ViewPart {
     viewer.addSelectionChangedListener(new TreeSelectionChangedListener());
 
     getSite().setSelectionProvider(viewer);
+
+    final IWorkbench workbench = PlatformUI.getWorkbench();
+    ICommandService commandService = (ICommandService) workbench.getService(ICommandService.class);
+    commandService.addExecutionListener(new ExecutionListener(viewer));
 
     Job.getJobManager().addJobChangeListener(new JobChangeAdapter() {
       @Override

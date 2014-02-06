@@ -3,25 +3,23 @@ package de.bht.fpa.mail.s791537.imapaccounts.handlers;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
+import de.bht.fpa.mail.s000000.common.mail.model.Account;
 import de.bht.fpa.mail.s791537.imapaccounts.ImapAccountLoader;
 import de.bht.fpa.mail.s791537.imapnavigation.node.AccountNode;
 import de.bht.fpa.mail.s791537.imapnavigation.node.Accounts;
+import de.ralfebert.rcputils.tables.TableViewerBuilder;
 
 public class ConfigureDialog extends SelectionDialog {
-  private ListViewer viewer;
-
-  // private TableViewer viewer;
+  // private ListViewer viewer;
+  private TableViewer viewer;
 
   protected ConfigureDialog(Shell parentShell) {
     super(parentShell);
@@ -31,7 +29,6 @@ public class ConfigureDialog extends SelectionDialog {
   @Override
   protected Control createDialogArea(Composite parent) {
     Composite composite = (Composite) super.createDialogArea(parent);
-    // Composite composite = parent; // TODO refactor composite = parent
 
     createMessageArea(composite);
     // viewer = new ListViewer(composite);
@@ -43,32 +40,69 @@ public class ConfigureDialog extends SelectionDialog {
     String[] accountNames = { "eins", "zwei", "drei vier", "fünf" };
     accountNames = new String[0];
 
-    Collection<String> names = new LinkedList<String>();
+    // TODO remove later
+    // Collection<String> names = new LinkedList<String>();
+    // for (Object o : accounts.getChildren()) {
+    // names.add(((AccountNode) o).getName());
+    // }
+
+    Collection<Account> accountList = new LinkedList<Account>();
     for (Object o : accounts.getChildren()) {
-      names.add(((AccountNode) o).getName());
+      accountList.add(((AccountNode) o).getAccount());
     }
 
-    // TableViewerBuilder t = new TableViewerBuilder(new Composite(parent,
-    // SWT.None));
-    // t.setInput(Arrays.asList(accounts.getChildren()));
-    // viewer = t.getTableViewer();
+    TableViewerBuilder t = new TableViewerBuilder(new Composite(parent, SWT.None));
 
-    viewer = new ListViewer(composite);
-    viewer.setContentProvider(ArrayContentProvider.getInstance());
-    viewer.setLabelProvider(new LabelProvider());
+    // ColumnBuilder city = t.createColumn("City");
+    // city.bindToProperty("name");
+    // // city.setPercentWidth(CITY_COLUMN_PERCENT_WIDTH);
+    // city.useAsDefaultSortColumn();
+    // city.makeEditable();
+    // city.build();
+
+    //@formatter:off
+//    t.createColumn("Name1").bindToValue(new BaseValue<Account>() {
+//      @Override
+//      public Object get(Account account) {
+//        return account.getName();
+//      }
+//    })
+////    .setPercentWidth(SUBJECT_PERCENT_WIDTH)
+//      .build();
+    t.createColumn("Name").bindToProperty("name")
+//      .setPercentWidth(SUBJECT_PERCENT_WIDTH)
+    .makeEditable().build();
+    t.createColumn("Host").bindToProperty("host")
+//      .setPercentWidth(SUBJECT_PERCENT_WIDTH)
+    .build();
+    t.createColumn("Username").bindToProperty("username")
+//    .setPercentWidth(SUBJECT_PERCENT_WIDTH)
+    .build();
+    t.createColumn("Pass").bindToProperty("password")
+//    .setPercentWidth(SUBJECT_PERCENT_WIDTH)
+      .build();
+    //@formatter:on
+
+    // t.setInput(Arrays.asList(accounts.getChildren()));
+    t.setInput(accountList);
+
+    viewer = t.getTableViewer();
+    // viewer = new TableViewer(composite);
+    // viewer.setContentProvider(ArrayContentProvider.getInstance());
+    // viewer.setLabelProvider(new LabelProvider());
 
     if (!accounts.hasChildren()) {
       // viewer.getList().setEnabled(false);
       viewer.setInput(new Object[] { "Current configuration contains no accounts." });
     } else {
-      viewer.setInput(names);
+      // viewer.setInput(accountList);
     }
-    viewer.addDoubleClickListener(new IDoubleClickListener() {
-      @Override
-      public void doubleClick(DoubleClickEvent event) {
-        okPressed();
-      }
-    });
+    // viewer.addDoubleClickListener(new IDoubleClickListener() {
+    // @Override
+    // public void doubleClick(DoubleClickEvent event) {
+    // okPressed();
+    // }
+    // });
     return composite;
   }
 
